@@ -1,0 +1,1228 @@
+{
+  "name": "Kafka",
+  "version": "1.0.0",
+  "author": "Alfredo Villegas",
+  "license": "MIT",
+  "description": "Módulo para producir, consumir y administrar topics de Apache Kafka. Soporta autenticación SASL/SSL para conectarse a Confluent Cloud, Azure Event Hubs, AWS MSK y clusters self-hosted.",
+  "description_lang": {
+    "es": "Módulo para producir, consumir y administrar topics de Apache Kafka. Soporta autenticación SASL/SSL para conectarse a Confluent Cloud, Azure Event Hubs, AWS MSK y clusters self-hosted.",
+    "en": "Module to produce, consume and administer Apache Kafka topics. Supports SASL/SSL authentication for Confluent Cloud, Azure Event Hubs, AWS MSK and self-hosted Kafka clusters.",
+    "pr": "Módulo para produzir, consumir e administrar topics do Apache Kafka. Suporta autenticação SASL/SSL para Confluent Cloud, Azure Event Hubs, AWS MSK e clusters self-hosted."
+  },
+  "disclaimer": "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
+  "homepage": "http://rocketbot.com",
+  "linux": true,
+  "windows": true,
+  "mac": true,
+  "docker": true,
+  "dependencies": {},
+  "title": {
+    "en": "Kafka",
+    "es": "Kafka",
+    "pr": "Kafka"
+  },
+  "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+  "children": [
+    {
+      "en": {
+        "title": "Connect Kafka",
+        "description": "Configures the connection to the Kafka cluster (bootstrap servers, security protocol, user, password). Can use an identifier to switch between multiple connections",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Conectar a Kafka",
+        "description": "Configura la conexión al clúster Kafka (servidores, protocolo de seguridad, usuario, contraseña). Puedes usar un identificador para cambiar entre otras conexiones",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Conectar ao Kafka",
+        "description": "Configura a conexão com o cluster Kafka (servidores, protocolo de segurança, usuário, senha). Pode usar um identificador para alternar entre outras conexões",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-lg",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": {
+              "es": "broker1:9092,broker2:9092",
+              "en": "broker1:9092,broker2:9092",
+              "pr": "broker1:9092,broker2:9092"
+            },
+            "title": {
+              "es": "Bootstrap servers:",
+              "en": "Bootstrap servers:",
+              "pr": "Bootstrap servers:"
+            },
+            "description": {
+              "es": "Lista de brokers separados por coma (host:puerto)",
+              "en": "Comma-separated list of brokers (host:port)",
+              "pr": "Lista de brokers separados por vírgula (host:porta)"
+            },
+            "id": "bootstrap_servers",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "select",
+            "title": {
+              "es": "Protocolo de seguridad:",
+              "en": "Security protocol:",
+              "pr": "Protocolo de segurança:"
+            },
+            "description": {
+              "es": "Protocolo de seguridad de la conexión, por defecto PLAINTEXT",
+              "en": "Connection security protocol, default PLAINTEXT",
+              "pr": "Protocolo de segurança da conexão, padrão PLAINTEXT"
+            },
+            "options": [
+              { "title": "PLAINTEXT", "value": "PLAINTEXT" },
+              { "title": "SASL_SSL", "value": "SASL_SSL" },
+              { "title": "SASL_PLAINTEXT", "value": "SASL_PLAINTEXT" },
+              { "title": "SSL", "value": "SSL" }
+            ],
+            "id": "security_protocol",
+            "css": "col-md-6"
+          },
+          {
+            "type": "select",
+            "title": {
+              "es": "Mecanismo SASL:",
+              "en": "SASL mechanism:",
+              "pr": "Mecanismo SASL:"
+            },
+            "description": {
+              "es": "Mecanismo de autenticación SASL, requerido si el protocolo usa SASL",
+              "en": "SASL authentication mechanism, required if the protocol uses SASL",
+              "pr": "Mecanismo de autenticação SASL, necessário se o protocolo usar SASL"
+            },
+            "options": [
+              { "title": "--Ninguno--", "value": "" },
+              { "title": "PLAIN", "value": "PLAIN" },
+              { "title": "SCRAM-SHA-256", "value": "SCRAM-SHA-256" },
+              { "title": "SCRAM-SHA-512", "value": "SCRAM-SHA-512" },
+              { "title": "OAUTHBEARER", "value": "OAUTHBEARER" }
+            ],
+            "id": "sasl_mechanism",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": {
+              "es": "usuario",
+              "en": "username",
+              "pr": "usuário"
+            },
+            "title": {
+              "es": "Usuario:",
+              "en": "Username:",
+              "pr": "Usuário:"
+            },
+            "description": {
+              "es": "Usuario SASL (API key en Confluent Cloud)",
+              "en": "SASL username (API key on Confluent Cloud)",
+              "pr": "Usuário SASL (API key no Confluent Cloud)"
+            },
+            "id": "username",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": {
+              "es": "secr3t_p@ss",
+              "en": "secr3t_p@ss",
+              "pr": "secr3t_p@ss"
+            },
+            "title": {
+              "es": "Contraseña:",
+              "en": "Password:",
+              "pr": "Senha:"
+            },
+            "description": {
+              "es": "Contraseña SASL (API secret en Confluent Cloud)",
+              "en": "SASL password (API secret on Confluent Cloud)",
+              "pr": "Senha SASL (API secret no Confluent Cloud)"
+            },
+            "id": "password",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": {
+              "es": "Conn1",
+              "en": "Conn1",
+              "pr": "Conn1"
+            },
+            "title": {
+              "es": "Sesión:",
+              "en": "Session:",
+              "pr": "Sessão:"
+            },
+            "description": {
+              "es": "Identificador de la conexión, si se deja vacío se usará la conexión por defecto",
+              "en": "Connection identifier, if empty the default connection will be used",
+              "pr": "Identificador de conexão, se vazio, a conexão padrão será usada"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": {
+              "es": "conectado",
+              "en": "connected",
+              "pr": "conectado"
+            },
+            "title": {
+              "es": "Resultado",
+              "en": "Result",
+              "pr": "Resultado"
+            },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable donde se almacena el resultado de la conexión",
+              "en": "Variable where the result of the connection is stored",
+              "pr": "Variável onde o resultado da conexão é armazenado"
+            },
+            "id": "result",
+            "css": "col-md-6",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "connect",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Test Connection",
+        "description": "Checks whether Rocketbot can connect to Kafka with the configured settings, returning true or false; on failure, the reason is printed to the execution log",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Probar Conexión",
+        "description": "Prueba si Rocketbot puede conectarse a Kafka con la configuración indicada, devolviendo true o false; si falla, el motivo se imprime en el log de ejecución",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Testar Conexão",
+        "description": "Testa se o Rocketbot consegue se conectar ao Kafka com a configuração indicada, retornando true ou false; se falhar, o motivo é impresso no log de execução",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-md",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión configurada con 'Conectar a Kafka'",
+              "en": "Identifier of the connection configured with 'Connect Kafka'",
+              "pr": "Identificador da conexão configurada com 'Conectar ao Kafka'"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "5", "en": "5", "pr": "5" },
+            "title": { "es": "Timeout (segundos):", "en": "Timeout (seconds):", "pr": "Timeout (segundos):" },
+            "description": {
+              "es": "Tiempo máximo de espera de la prueba",
+              "en": "Maximum time to wait for the test",
+              "pr": "Tempo máximo de espera do teste"
+            },
+            "id": "timeout",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "conexion_ok", "en": "connection_ok", "pr": "conexao_ok" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable con true si la conexión fue exitosa, o false en caso contrario",
+              "en": "Variable with true if the connection succeeded, or false otherwise",
+              "pr": "Variável com true se a conexão foi bem-sucedida, ou false caso contrário"
+            },
+            "id": "result",
+            "css": "col-md-12",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "test_connection",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "List Topics",
+        "description": "Lists the topics available in Kafka. A topic is like a channel where messages are published and read",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Listar Topics",
+        "description": "Lista los topics disponibles en Kafka. Un topic es como un canal donde se publican y leen mensajes",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Listar Topics",
+        "description": "Lista os topics disponíveis no Kafka. Um topic é como um canal onde as mensagens são publicadas e lidas",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-md",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "5", "en": "5", "pr": "5" },
+            "title": { "es": "Timeout (segundos):", "en": "Timeout (seconds):", "pr": "Timeout (segundos):" },
+            "description": {
+              "es": "Tiempo máximo de espera de la consulta",
+              "en": "Maximum time to wait for the query",
+              "pr": "Tempo máximo de espera da consulta"
+            },
+            "id": "timeout",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "topics", "en": "topics", "pr": "topics" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable donde se almacena la lista de topics [{topic, partitions}]",
+              "en": "Variable where the list of topics [{topic, partitions}] is stored",
+              "pr": "Variável onde a lista de topics [{topic, partitions}] é armazenada"
+            },
+            "id": "result",
+            "css": "col-md-12",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "list_topics",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Create Topic",
+        "description": "Creates a new Kafka topic, indicating name, number of partitions and replication factor if applicable",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Crear Topic",
+        "description": "Crea un nuevo topic en Kafka, indicando nombre, cantidad de particiones y factor de replicación si corresponde",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Criar Topic",
+        "description": "Cria um novo topic no Kafka, indicando nome, quantidade de partições e fator de replicação se aplicável",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-lg",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "mi-topico", "en": "my-topic", "pr": "meu-topico" },
+            "title": { "es": "Tópico:", "en": "Topic:", "pr": "Tópico:" },
+            "description": {
+              "es": "Nombre del nuevo tópico",
+              "en": "Name of the new topic",
+              "pr": "Nome do novo tópico"
+            },
+            "id": "topic",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "1", "en": "1", "pr": "1" },
+            "title": { "es": "Particiones:", "en": "Partitions:", "pr": "Partições:" },
+            "description": {
+              "es": "Cantidad de particiones del tópico, por defecto 1",
+              "en": "Number of partitions for the topic, default 1",
+              "pr": "Quantidade de partições do tópico, padrão 1"
+            },
+            "id": "partitions",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "1", "en": "1", "pr": "1" },
+            "title": { "es": "Factor de replicación:", "en": "Replication factor:", "pr": "Fator de replicação:" },
+            "description": {
+              "es": "Factor de replicación del tópico, por defecto 1",
+              "en": "Replication factor for the topic, default 1",
+              "pr": "Fator de replicação do tópico, padrão 1"
+            },
+            "id": "replication_factor",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "resultado", "en": "result", "pr": "resultado" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable donde se almacena el resultado de la creación",
+              "en": "Variable where the creation result is stored",
+              "pr": "Variável onde o resultado da criação é armazenado"
+            },
+            "id": "result",
+            "css": "col-md-6",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "create_topic",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Delete Topic",
+        "description": "IRREVERSIBLE: deletes a Kafka topic. Depending on the cluster configuration this also deletes its associated messages. Double-check the topic name before running this in production",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Eliminar Topic",
+        "description": "IRREVERSIBLE: elimina un topic de Kafka. Según la configuración del clúster, también borra los mensajes asociados. Verifique bien el nombre del tópico antes de correrlo en producción",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Excluir Topic",
+        "description": "IRREVERSÍVEL: exclui um topic do Kafka. Dependendo da configuração do cluster, também apaga as mensagens associadas. Confira bem o nome do tópico antes de rodar isso em produção",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-md",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "mi-topico", "en": "my-topic", "pr": "meu-topico" },
+            "title": { "es": "Tópico:", "en": "Topic:", "pr": "Tópico:" },
+            "description": {
+              "es": "Nombre exacto del tópico a eliminar. Esta acción no se puede deshacer",
+              "en": "Exact name of the topic to delete. This action cannot be undone",
+              "pr": "Nome exato do tópico a excluir. Esta ação não pode ser desfeita"
+            },
+            "id": "topic",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "resultado", "en": "result", "pr": "resultado" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable donde se almacena el resultado de la eliminación",
+              "en": "Variable where the deletion result is stored",
+              "pr": "Variável onde o resultado da exclusão é armazenado"
+            },
+            "id": "result",
+            "css": "col-md-6",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "delete_topic",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Describe Topic",
+        "description": "Shows detailed information about a topic: partitions, leader, replicas, ISR, error state and configuration. Useful for diagnostics",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Describir Topic",
+        "description": "Muestra información detallada de un topic: particiones, líder, réplicas, ISR, estado de error y configuración. Sirve para diagnóstico",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Descrever Topic",
+        "description": "Mostra informações detalhadas de um topic: partições, líder, réplicas, ISR, estado de erro e configuração. Serve para diagnóstico",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-lg",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "mi-topico", "en": "my-topic", "pr": "meu-topico" },
+            "title": { "es": "Tópico:", "en": "Topic:", "pr": "Tópico:" },
+            "description": {
+              "es": "Nombre del tópico a describir",
+              "en": "Name of the topic to describe",
+              "pr": "Nome do tópico a descrever"
+            },
+            "id": "topic",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "10", "en": "10", "pr": "10" },
+            "title": { "es": "Timeout (segundos):", "en": "Timeout (seconds):", "pr": "Timeout (segundos):" },
+            "description": {
+              "es": "Tiempo máximo de espera de la consulta, por defecto 10",
+              "en": "Maximum time to wait for the query, default 10",
+              "pr": "Tempo máximo de espera da consulta, padrão 10"
+            },
+            "id": "timeout",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "detalle_topico", "en": "topic_detail", "pr": "detalhe_topico" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable con {topic, partitions: [{partition, leader, replicas, isrs, error}], config: {...}}",
+              "en": "Variable with {topic, partitions: [{partition, leader, replicas, isrs, error}], config: {...}}",
+              "pr": "Variável com {topic, partitions: [{partition, leader, replicas, isrs, error}], config: {...}}"
+            },
+            "id": "result",
+            "css": "col-md-12",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "describe_topic",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Get Offsets",
+        "description": "Queries the earliest and latest available offset for each partition of a topic. Useful to know how many messages are available or from which point a consumer could read",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Obtener Offsets",
+        "description": "Consulta el offset más viejo y el más nuevo disponible por cada partición de un tópico. Sirve para saber cuántos mensajes hay disponibles o desde qué punto puede leer un consumer",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Obter Offsets",
+        "description": "Consulta o offset mais antigo e o mais novo disponível de cada partição de um tópico. Serve para saber quantas mensagens estão disponíveis ou a partir de que ponto um consumer pode ler",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-lg",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "mi-topico", "en": "my-topic", "pr": "meu-topico" },
+            "title": { "es": "Tópico:", "en": "Topic:", "pr": "Tópico:" },
+            "description": {
+              "es": "Nombre del tópico a consultar",
+              "en": "Name of the topic to query",
+              "pr": "Nome do tópico a consultar"
+            },
+            "id": "topic",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "10", "en": "10", "pr": "10" },
+            "title": { "es": "Timeout (segundos):", "en": "Timeout (seconds):", "pr": "Timeout (segundos):" },
+            "description": {
+              "es": "Tiempo máximo de espera de la consulta, por defecto 10",
+              "en": "Maximum time to wait for the query, default 10",
+              "pr": "Tempo máximo de espera da consulta, padrão 10"
+            },
+            "id": "timeout",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "offsets", "en": "offsets", "pr": "offsets" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable con lista [{partition, earliest_offset, latest_offset, messages_available}]",
+              "en": "Variable with list [{partition, earliest_offset, latest_offset, messages_available}]",
+              "pr": "Variável com lista [{partition, earliest_offset, latest_offset, messages_available}]"
+            },
+            "id": "result",
+            "css": "col-md-12",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "get_offsets",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Produce Message",
+        "description": "Sends a single message to a topic. For example, publishing a JSON with invoice, order or event data",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Producir Mensaje",
+        "description": "Envía un mensaje individual a un topic. Por ejemplo, publicar un JSON con datos de una factura, orden o evento",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Produzir Mensagem",
+        "description": "Envia uma mensagem individual a um topic. Por exemplo, publicar um JSON com dados de uma fatura, pedido ou evento",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-lg",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "mi-topico", "en": "my-topic", "pr": "meu-topico" },
+            "title": { "es": "Tópico:", "en": "Topic:", "pr": "Tópico:" },
+            "description": {
+              "es": "Nombre del tópico donde se publicará el mensaje",
+              "en": "Name of the topic where the message will be published",
+              "pr": "Nome do tópico onde a mensagem será publicada"
+            },
+            "id": "topic",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "clave (opcional)", "en": "key (optional)", "pr": "chave (opcional)" },
+            "title": { "es": "Clave:", "en": "Key:", "pr": "Chave:" },
+            "description": {
+              "es": "Clave del mensaje, determina la partición de destino",
+              "en": "Message key, determines the destination partition",
+              "pr": "Chave da mensagem, determina a partição de destino"
+            },
+            "id": "key",
+            "css": "col-md-6"
+          },
+          {
+            "type": "textarea",
+            "placeholder": { "es": "contenido del mensaje", "en": "message content", "pr": "conteúdo da mensagem" },
+            "title": { "es": "Mensaje:", "en": "Message:", "pr": "Mensagem:" },
+            "description": {
+              "es": "Contenido del mensaje a publicar (string o JSON), se envía tal cual se escribe, incluyendo saltos de línea",
+              "en": "Content of the message to publish (string or JSON), sent exactly as typed, including line breaks",
+              "pr": "Conteúdo da mensagem a ser publicada (string ou JSON), enviado exatamente como digitado, incluindo quebras de linha"
+            },
+            "id": "value",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "resultado", "en": "result", "pr": "resultado" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable donde se almacena el resultado del envío",
+              "en": "Variable where the result of the send is stored",
+              "pr": "Variável onde o resultado do envio é armazenado"
+            },
+            "id": "result",
+            "css": "col-md-6",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "produce",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Produce Batch",
+        "description": "Sends several messages together to a topic. Useful when the bot has a list of records to publish all at once",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Producir Lote de Mensajes",
+        "description": "Envía varios mensajes juntos a un topic. Sirve cuando el bot tiene una lista de registros y quiere publicarlos todos en Kafka",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Produzir Lote de Mensagens",
+        "description": "Envia várias mensagens juntas a um topic. Útil quando o bot tem uma lista de registros e quer publicá-los todos no Kafka",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-lg",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "mi-topico", "en": "my-topic", "pr": "meu-topico" },
+            "title": { "es": "Tópico:", "en": "Topic:", "pr": "Tópico:" },
+            "description": {
+              "es": "Nombre del tópico donde se publicarán los mensajes",
+              "en": "Name of the topic where the messages will be published",
+              "pr": "Nome do tópico onde as mensagens serão publicadas"
+            },
+            "id": "topic",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "textarea",
+            "placeholder": {
+              "es": "[{\"key\": \"1\", \"value\": \"hola\"}, {\"key\": \"2\", \"value\": {\"total\": 100}}]",
+              "en": "[{\"key\": \"1\", \"value\": \"hello\"}, {\"key\": \"2\", \"value\": {\"total\": 100}}]",
+              "pr": "[{\"key\": \"1\", \"value\": \"ola\"}, {\"key\": \"2\", \"value\": {\"total\": 100}}]"
+            },
+            "title": { "es": "Mensajes (JSON):", "en": "Messages (JSON):", "pr": "Mensagens (JSON):" },
+            "description": {
+              "es": "Lista JSON de mensajes. Cada item puede ser {key, value} o un valor simple",
+              "en": "JSON list of messages. Each item can be {key, value} or a plain value",
+              "pr": "Lista JSON de mensagens. Cada item pode ser {key, value} ou um valor simples"
+            },
+            "id": "messages",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "resultado", "en": "result", "pr": "resultado" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable con {sent, failed} con la cantidad enviada y los errores",
+              "en": "Variable with {sent, failed} with the sent count and errors",
+              "pr": "Variável com {sent, failed} com a quantidade enviada e os erros"
+            },
+            "id": "result",
+            "css": "col-md-6",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "produce_batch",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Consume Messages",
+        "description": "Reads messages from one or more topics, each tagged with its own 'topic' field. Limited by message count and timeout. The consumer (topics, group ID, initial offset, max poll interval) is created on the session's first call and reused afterwards; run 'Close Consumer' first to change those settings",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Consumir Mensajes",
+        "description": "Lee mensajes de uno o varios topics, cada uno con su propio campo 'topic'. Tiene límite de cantidad y de tiempo. El consumer (topics, group ID, offset inicial, max poll interval) se crea en la primera llamada de la sesión y se reutiliza después; ejecute 'Cerrar Consumidor' primero para cambiar esos valores",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Consumir Mensagens",
+        "description": "Lê mensagens de um ou vários topics, cada uma com seu próprio campo 'topic'. Tem limite de quantidade e de tempo. O consumer (topics, group ID, offset inicial, max poll interval) é criado na primeira chamada da sessão e reutilizado depois; execute 'Fechar Consumidor' primeiro para alterar esses valores",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-lg",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "topico1,topico2", "en": "topic1,topic2", "pr": "topico1,topico2" },
+            "title": { "es": "Tópicos:", "en": "Topics:", "pr": "Tópicos:" },
+            "description": {
+              "es": "Tópicos a consumir, separados por coma. Si pone más de uno, cada mensaje puede venir de cualquiera de ellos; el campo 'topic' indica de cuál",
+              "en": "Topics to consume, comma-separated. If you list more than one, each message can come from any of them; the 'topic' field tells you which one",
+              "pr": "Tópicos a consumir, separados por vírgula. Se informar mais de um, cada mensagem pode vir de qualquer um deles; o campo 'topic' indica de qual"
+            },
+            "id": "topics",
+            "css": "col-md-12",
+            "required": true
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "mi-grupo", "en": "my-group", "pr": "meu-grupo" },
+            "title": { "es": "Group ID:", "en": "Group ID:", "pr": "Group ID:" },
+            "description": {
+              "es": "Identificador del consumer group, compartido por todos los tópicos de 'Tópicos'. Solo se aplica al crear el consumer",
+              "en": "Consumer group identifier, shared by all topics in 'Topics'. Only applies when the consumer is created",
+              "pr": "Identificador do consumer group, compartilhado por todos os tópicos em 'Tópicos'. Só se aplica na criação do consumer"
+            },
+            "id": "group_id",
+            "css": "col-md-6"
+          },
+          {
+            "type": "select",
+            "title": { "es": "Offset inicial:", "en": "Initial offset:", "pr": "Offset inicial:" },
+            "description": {
+              "es": "Desde dónde empezar a leer si no hay offset guardado. Solo se aplica al crear el consumer",
+              "en": "Where to start reading if there is no committed offset. Only applies when the consumer is created",
+              "pr": "De onde começar a ler se não houver offset salvo. Só se aplica na criação do consumer"
+            },
+            "options": [
+              { "title": "latest", "value": "latest" },
+              { "title": "earliest", "value": "earliest" }
+            ],
+            "id": "auto_offset_reset",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "5", "en": "5", "pr": "5" },
+            "title": { "es": "Timeout (segundos):", "en": "Timeout (seconds):", "pr": "Timeout (segundos):" },
+            "description": {
+              "es": "Tiempo máximo de espera por mensaje antes de continuar",
+              "en": "Maximum time to wait for a message before continuing",
+              "pr": "Tempo máximo de espera por mensagem antes de continuar"
+            },
+            "id": "timeout",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "10", "en": "10", "pr": "10" },
+            "title": { "es": "Máximo de mensajes:", "en": "Max messages:", "pr": "Máximo de mensagens:" },
+            "description": {
+              "es": "Cantidad máxima de mensajes a traer en esta ejecución",
+              "en": "Maximum number of messages to fetch in this run",
+              "pr": "Quantidade máxima de mensagens a buscar nesta execução"
+            },
+            "id": "max_messages",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "1800", "en": "1800", "pr": "1800" },
+            "title": { "es": "Max poll interval (segundos):", "en": "Max poll interval (seconds):", "pr": "Max poll interval (segundos):" },
+            "description": {
+              "es": "Tiempo máximo entre llamadas a 'Consumir Mensajes' o 'Commit Offsets' antes de que Kafka expulse al consumer por inactividad. Por defecto 1800 (30 min). Solo se aplica al crear el consumer",
+              "en": "Maximum time between calls to 'Consume Messages' or 'Commit Offsets' before Kafka evicts the consumer for inactivity. Default 1800 (30 min). Only applies when the consumer is created",
+              "pr": "Tempo máximo entre chamadas a 'Consumir Mensagens' ou 'Commit Offsets' antes que o Kafka remova o consumer por inatividade. Padrão 1800 (30 min). Só se aplica na criação do consumer"
+            },
+            "id": "max_poll_interval",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "mensajes", "en": "messages", "pr": "mensagens" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable donde se almacena la lista de mensajes recibidos. Cada mensaje incluye topic, partition, offset, key y value, así se puede distinguir de qué tópico vino cuando se consumen varios a la vez",
+              "en": "Variable where the list of received messages is stored. Each message includes topic, partition, offset, key and value, so you can tell which topic it came from when consuming several at once",
+              "pr": "Variável onde a lista de mensagens recebidas é armazenada. Cada mensagem inclui topic, partition, offset, key e value, assim é possível identificar de qual tópico ela veio ao consumir vários de uma vez"
+            },
+            "id": "result",
+            "css": "col-md-12",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "consume",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Commit Offsets",
+        "description": "Confirms that consumed messages were processed and tells Kafka where to continue the next read. By default commits the whole batch from 'Consume Messages'; use 'Processed messages' to commit only up to the last successful one instead",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Commit Offsets",
+        "description": "Confirma que los mensajes consumidos fueron procesados e indica a Kafka desde dónde continuar la próxima lectura. Por defecto confirma todo el lote de 'Consumir Mensajes'; use 'Mensajes procesados' para confirmar solo hasta el último exitoso",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Commit Offsets",
+        "description": "Confirma que as mensagens consumidas foram processadas e indica ao Kafka de onde continuar a próxima leitura. Por padrão confirma todo o lote de 'Consumir Mensagens'; use 'Mensagens processadas' para confirmar somente até a última bem-sucedida",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-md",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "textarea",
+            "placeholder": {
+              "es": "[{\"topic\": \"facturas\", \"partition\": 0, \"offset\": 41}]",
+              "en": "[{\"topic\": \"facturas\", \"partition\": 0, \"offset\": 41}]",
+              "pr": "[{\"topic\": \"facturas\", \"partition\": 0, \"offset\": 41}]"
+            },
+            "title": { "es": "Mensajes procesados (opcional):", "en": "Processed messages (optional):", "pr": "Mensagens processadas (opcional):" },
+            "description": {
+              "es": "Opcional. Lista JSON con los mensajes que el bot procesó con éxito (mismo formato que devuelve 'Consumir Mensajes'). Si se deja vacío, se confirma todo el lote leído",
+              "en": "Optional. JSON list with the messages the bot processed successfully (same format returned by 'Consume Messages'). If left empty, the whole batch read is committed",
+              "pr": "Opcional. Lista JSON com as mensagens que o bot processou com sucesso (mesmo formato retornado por 'Consumir Mensagens'). Se deixado vazio, confirma todo o lote lido"
+            },
+            "id": "messages",
+            "css": "col-md-12"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "resultado", "en": "result", "pr": "resultado" },
+            "title": { "es": "Resultado", "en": "Result", "pr": "Resultado" },
+            "help": {
+              "en": "Variable where the result is stored without {}",
+              "es": "Variable donde se almacena el resultado sin {}",
+              "pr": "Variável onde o resultado é armazenado sem {}"
+            },
+            "description": {
+              "es": "Variable con true si se confirmó, o false si no había nada nuevo que confirmar",
+              "en": "Variable with true if committed, or false if there was nothing new to confirm",
+              "pr": "Variável com true se confirmado, ou false se não havia nada novo para confirmar"
+            },
+            "id": "result",
+            "css": "col-md-6",
+            "required": true,
+            "remove_vars": true
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "commit",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Close Consumer",
+        "description": "Closes the consumer session and frees its resources. Required before changing consumer settings (Group ID, Initial offset, Max poll interval) on the next 'Consume Messages' call",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Cerrar Consumidor",
+        "description": "Cierra la sesión del consumidor y libera sus recursos. Es necesario antes de cambiar la configuración del consumer (Group ID, Offset inicial, Max poll interval) en la próxima llamada a 'Consumir Mensajes'",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Fechar Consumidor",
+        "description": "Fecha a sessão do consumidor e libera seus recursos. É necessário antes de alterar a configuração do consumer (Group ID, Offset inicial, Max poll interval) na próxima chamada de 'Consumir Mensagens'",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-md",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "close_consumer",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    }
+  ]
+}
