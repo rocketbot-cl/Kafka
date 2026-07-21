@@ -103,8 +103,7 @@
               { "title": "--Ninguno--", "value": "" },
               { "title": "PLAIN", "value": "PLAIN" },
               { "title": "SCRAM-SHA-256", "value": "SCRAM-SHA-256" },
-              { "title": "SCRAM-SHA-512", "value": "SCRAM-SHA-512" },
-              { "title": "OAUTHBEARER", "value": "OAUTHBEARER" }
+              { "title": "SCRAM-SHA-512", "value": "SCRAM-SHA-512" }
             ],
             "id": "sasl_mechanism",
             "css": "col-md-6"
