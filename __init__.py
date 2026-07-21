@@ -4,10 +4,7 @@ Kafka module for Rocketbot.
 
 Business logic lives in libs/KafkaObject.py; this file is only a thin
 dispatcher (reads parameters with GetParams, calls a KafkaObject method,
-stores the result with SetVar). 'confluent-kafka' is installed only the
-first time the module runs: if the import fails because there is no valid
-wheel for the current OS/architecture/Python version, 'pip install
-confluent-kafka -t libs' is run automatically and the import is retried.
+stores the result with SetVar).
 
 v1 commands (module):
     connect         -> opens a session with the cluster connection settings
@@ -30,24 +27,13 @@ Pending v2 roadmap:
 """
 import os
 import sys
-import subprocess
 
 base_path = tmp_global_obj["basepath"]
 module_path = os.path.join(base_path, 'modules', 'Kafka', 'libs')
 if module_path not in sys.path:
     sys.path.append(module_path)
 
-try:
-    from KafkaObject import KafkaObject, KafkaPartialResultError
-except ImportError:
-    # '--upgrade' is necessary: without it, pip does not overwrite content
-    # already present in 'libs' (e.g. the binary vendored for another
-    # platform/Python version) and the installation is left half-done,
-    # leaving the ImportError untouched.
-    print("[Kafka] confluent-kafka is not available for this platform, installing into '%s'..." % module_path)
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "confluent-kafka", "-t", module_path, "--upgrade"])
-
-    from KafkaObject import KafkaObject, KafkaPartialResultError
+from KafkaObject import KafkaObject, KafkaPartialResultError
 
 module = GetParams("module")
 
