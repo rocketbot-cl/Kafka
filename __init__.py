@@ -30,13 +30,24 @@ Pending v2 roadmap:
 """
 import os
 import sys
+import subprocess
 
 base_path = tmp_global_obj["basepath"]
 module_path = os.path.join(base_path, 'modules', 'Kafka', 'libs')
 if module_path not in sys.path:
     sys.path.append(module_path)
 
-from KafkaObject import KafkaObject, KafkaPartialResultError
+try:
+    from KafkaObject import KafkaObject, KafkaPartialResultError
+except ImportError:
+    # '--upgrade' is necessary: without it, pip does not overwrite content
+    # already present in 'libs' (e.g. the binary vendored for another
+    # platform/Python version) and the installation is left half-done,
+    # leaving the ImportError untouched.
+    print("[Kafka] confluent-kafka is not available for this platform, installing into '%s'..." % module_path)
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "confluent-kafka", "-t", module_path, "--upgrade"])
+
+    from KafkaObject import KafkaObject, KafkaPartialResultError
 
 module = GetParams("module")
 
@@ -223,7 +234,12 @@ elif module == "commit":
 
 elif module == "close_consumer":
     session = GetParams("session")
-    mod_Kafka.close_consumer_command(session)
+
+    try:
+        mod_Kafka.close_consumer_command(session)
+    except Exception as e:
+        PrintException()
+        raise e
 
 else:
     raise Exception("Module '%s' is not implemented." % module)
