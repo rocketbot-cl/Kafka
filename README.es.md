@@ -19,7 +19,7 @@ Para instalar el módulo en Rocketbot Studio, se puede hacer de dos formas:
 
 
 1. Conectar a Kafka
-Configura la conexión al clúster Kafka (servidores, protocolo de seguridad, usuario, contraseña). Puedes usar un identificador para cambiar entre otras conexiones
+Configura la conexión al clúster Kafka. Para Apache Kafka/self-hosted use broker:9092 con PLAINTEXT o su configuración SSL/SASL. Para Confluent Cloud use SASL_SSL + PLAIN, usuario=API key y contraseña=API secret. Para Azure Event Hubs por endpoint Kafka use <namespace>.servicebus.windows.net:9093, SASL_SSL + PLAIN, usuario=$ConnectionString y contraseña=connection string completa de Event Hubs. Puede usar un identificador de sesión para cambiar entre varias conexiones
 
 2. Probar Conexión
 Prueba si Rocketbot puede conectarse a Kafka con la configuración indicada, devolviendo true o false; si falla, el motivo se imprime en el log de ejecución

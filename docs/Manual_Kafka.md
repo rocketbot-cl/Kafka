@@ -8,7 +8,7 @@ Module to produce, consume and administer Apache Kafka topics. Supports SASL/SSL
 
 *Read this in other languages: [English](Manual_Kafka.md), [Português](Manual_Kafka.pr.md), [Español](Manual_Kafka.es.md)*
 
-![banner](imgs/Banner_Kafka.png o jpg)
+![banner](imgs/Banner_Kafka.jpg)
 ## How to install this module
 
 To install the module in Rocketbot Studio, it can be done in two ways:
@@ -25,35 +25,43 @@ Basic usage:
 3. Use the topic commands (List Topics, Create Topic, Delete Topic, Describe Topic, Get Offsets) to manage topics.
 4. Use Produce Message / Produce Batch to publish, and Consume Messages / Commit Offsets / Close Consumer to read.
 
+Connection examples:
+- Local or self-hosted Kafka without authentication: Bootstrap servers `localhost:9092` or `broker1:9092,broker2:9092`; Security protocol `PLAINTEXT`; leave SASL mechanism, Username and Password empty.
+- Self-hosted 
+Kafka with SASL: Bootstrap servers `broker1:9093,broker2:9093`; Security protocol `SASL_SSL` or `SASL_PLAINTEXT` according to the cluster; SASL mechanism `PLAIN`, `SCRAM-SHA-256` or `SCRAM-SHA-512`; Username and Password from your Kafka user.
+- Confluent Cloud: Bootstrap servers from Cluster settings, usually `pkc-xxxxx.region.provider.confluent.cloud:9092`; Security protocol `SASL_SSL`; SASL mechanism `PLAIN`; Username = API key; Password = API secret.
+- Azure Event Hubs using Kafka API: Bootstrap servers `<namespace>.servicebus.windows.net:9093`; Security protocol `SASL_SSL`; SASL mechanism `PLAIN`; Username exactly `$ConnectionString`; Password = the full Event Hubs connection string, for example `Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<key>`. If the connection string includes `EntityPath`, use the same Event Hub name as the Kafka topic.
+- AWS MSK: Use the broker list and authentication mode provided by the cluster. For 
+IAM/OAUTHBEARER authentication this module is not enough as-is; use SCRAM or PLAIN credentials exposed by the cluster.
+
 Sessions:
 - Every command takes a Session identifier. Leave it empty to use the default connection, or set one to keep several independent connections/consumers open in the same flow (for example, one per cluster or per consumer group).
-- 
-Connect Kafka only stores the connection settings; it does not create the consumer yet.
+- Connect Kafka only stores the connection settings; it does not create the consumer yet.
 
 Producing messages:
 - Produce Message sends a single message (key optional; the value can be plain text or JSON).
 - Produce Batch sends a JSON list of messages in one call, for example `[{"key": "1", "value": "hello"}, {"key": "2", "value": {"total": 100}}]`. Each item can be a plain value or a `{key, value}` object. Useful when the bot already has a list of records to publish together.
 
 Consuming messages (consumer group flow):
-1. Run Consume Messages with Topics (comma-separated), Group ID and Initial offset. These, together with Max poll interval, are only applied the first time the consumer is created for that session; to change them later, run Close Consumer first and call Consume Messages again.
+1. Run Consume Messages with Topics (comma-separated), Group ID and Initial offset. These, together with Max poll 
+interval, are only applied the first time the consumer is created for that session; to change them later, run Close Consumer first and call Consume Messages again.
 2. Process the returned messages in the bot. Each message includes its own `topic`, `partition`, `offset`, `key` and `value`, so you can tell which topic it came from when subscribed to more than one.
-
 3. Run Commit Offsets to tell Kafka the messages were processed. By default it commits the whole batch; if the bot only processed some of the messages, pass the successful ones in "Processed messages" so only those (and earlier ones) are committed, and the rest are redelivered on the next read.
 4. Run Close Consumer when the flow finishes, or before changing Topics, Group ID, Initial offset or Max poll interval on the same session.
 
 Important notes:
-- Test Connection never stops the flow: it returns true or false so the bot can branch on the result. On failure, the reason is printed to the execution log, not returned in the result variable.
+- Test Connection never stops the flow: it returns true or false so the bot can branch on the result. On failure, the reason is printed to the execution log, not returned in the 
+result variable.
 - Commit Offsets returns false, without raising an error, when there was nothing new to confirm since the last commit -- this is normal, not a failure. If the commit itself fails (for example, the consumer was evicted from the group), the command raises an error instead of returning false.
-- Message values are stored and returned exactly as sent, 
-including any whitespace, line breaks or formatting from the original text (Produce Message/Batch do not trim or reformat them, and Consume Messages returns them unchanged).
+- Message values are stored and returned exactly as sent, including any whitespace, line breaks or formatting from the original text (Produce Message/Batch do not trim or reformat them, and Consume Messages returns them unchanged).
 - Group ID, Initial offset and Max poll interval apply equally to every topic listed in a single Consume Messages call. To use different settings per topic, use a separate session for each one.
 - If Commit Offsets runs later than the configured Max poll interval after the last Consume Messages call, Kafka may have already evicted the consumer from the group; run Consume Messages again or increase Max poll interval.
-- Delete Topic is irreversible and, depending on the cluster configuration, also deletes the topic's messages. Double-check the topic name before running it in production.
+- Delete Topic is irreversible and, 
+depending on the cluster configuration, also deletes the topic's messages. Double-check the topic name before running it in production.
 - The first time the module runs on a machine, it installs the `confluent-kafka` client library automatically if a compatible version is not already bundled; this requires internet access on that first run.
 
 References:
-- 
-https://kafka.apache.org/documentation/
+- https://kafka.apache.org/documentation/
 - https://docs.confluent.io/platform/current/clients/confluent-kafka-python/html/index.html
 
 
@@ -61,14 +69,14 @@ https://kafka.apache.org/documentation/
 
 ### Connect Kafka
 
-Configures the connection to the Kafka cluster (bootstrap servers, security protocol, user, password). Can use an identifier to switch between multiple connections
+Configures the connection to the Kafka cluster. For Apache Kafka/self-hosted use broker:9092 with PLAINTEXT or your SSL/SASL settings. For Confluent Cloud use SASL_SSL + PLAIN, username=API key and password=API secret. For Azure Event Hubs Kafka endpoint use <namespace>.servicebus.windows.net:9093, SASL_SSL + PLAIN, username=$ConnectionString and password=the full Event Hubs connection string. You can use a session identifier to switch between multiple connections
 |Parameters|Description|example|
 | --- | --- | --- |
-|Bootstrap servers|Comma-separated list of brokers (hostport)|broker1:9092,broker2:9092|
+|Bootstrap servers|Comma-separated list of brokers (hostport). Examples localhost9092, pkc-xxxxx.region.provider.confluent.cloud9092, namespace.servicebus.windows.net9093 for Azure Event Hubs.|broker1:9092,broker2:9092|
 |Security protocol|Connection security protocol, default PLAINTEXT||
 |SASL mechanism|SASL authentication mechanism, required if the protocol uses SASL||
-|Username|SASL username (API key on Confluent Cloud)|username|
-|Password|SASL password (API secret on Confluent Cloud)|secr3t_p@ss|
+|Username|SASL username. On Confluent Cloud this is the API key; on Azure Event Hubs with Kafka it must be $ConnectionString.|username|
+|Password|SASL password. On Confluent Cloud this is the API secret; on Azure Event Hubs this is the full connection string.|secr3t_p@ss|
 |Session|Connection identifier, if empty the default connection will be used|Conn1|
 |Result|Variable where the result of the connection is stored|connected|
 

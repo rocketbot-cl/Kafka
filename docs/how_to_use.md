@@ -8,6 +8,13 @@ Basic usage:
 3. Use the topic commands (List Topics, Create Topic, Delete Topic, Describe Topic, Get Offsets) to manage topics.
 4. Use Produce Message / Produce Batch to publish, and Consume Messages / Commit Offsets / Close Consumer to read.
 
+Connection examples:
+- Local or self-hosted Kafka without authentication: Bootstrap servers `localhost:9092` or `broker1:9092,broker2:9092`; Security protocol `PLAINTEXT`; leave SASL mechanism, Username and Password empty.
+- Self-hosted Kafka with SASL: Bootstrap servers `broker1:9093,broker2:9093`; Security protocol `SASL_SSL` or `SASL_PLAINTEXT` according to the cluster; SASL mechanism `PLAIN`, `SCRAM-SHA-256` or `SCRAM-SHA-512`; Username and Password from your Kafka user.
+- Confluent Cloud: Bootstrap servers from Cluster settings, usually `pkc-xxxxx.region.provider.confluent.cloud:9092`; Security protocol `SASL_SSL`; SASL mechanism `PLAIN`; Username = API key; Password = API secret.
+- Azure Event Hubs using Kafka API: Bootstrap servers `<namespace>.servicebus.windows.net:9093`; Security protocol `SASL_SSL`; SASL mechanism `PLAIN`; Username exactly `$ConnectionString`; Password = the full Event Hubs connection string, for example `Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<key>`. If the connection string includes `EntityPath`, use the same Event Hub name as the Kafka topic.
+- AWS MSK: Use the broker list and authentication mode provided by the cluster. For IAM/OAUTHBEARER authentication this module is not enough as-is; use SCRAM or PLAIN credentials exposed by the cluster.
+
 Sessions:
 - Every command takes a Session identifier. Leave it empty to use the default connection, or set one to keep several independent connections/consumers open in the same flow (for example, one per cluster or per consumer group).
 - Connect Kafka only stores the connection settings; it does not create the consumer yet.
@@ -47,6 +54,13 @@ Uso basico:
 3. Use los comandos de topics (Listar Topics, Crear Topic, Eliminar Topic, Describir Topic, Obtener Offsets) para administrarlos.
 4. Use Producir Mensaje / Producir Batch para publicar, y Consumir Mensajes / Commit Offsets / Cerrar Consumidor para leer.
 
+Ejemplos de conexion:
+- Kafka local o self-hosted sin autenticacion: Bootstrap servers `localhost:9092` o `broker1:9092,broker2:9092`; Protocolo de seguridad `PLAINTEXT`; deje vacios Mecanismo SASL, Usuario y Contraseña.
+- Kafka self-hosted con SASL: Bootstrap servers `broker1:9093,broker2:9093`; Protocolo de seguridad `SASL_SSL` o `SASL_PLAINTEXT` segun el cluster; Mecanismo SASL `PLAIN`, `SCRAM-SHA-256` o `SCRAM-SHA-512`; Usuario y Contraseña del usuario Kafka.
+- Confluent Cloud: Bootstrap servers desde la configuracion del cluster, normalmente `pkc-xxxxx.region.provider.confluent.cloud:9092`; Protocolo de seguridad `SASL_SSL`; Mecanismo SASL `PLAIN`; Usuario = API key; Contraseña = API secret.
+- Azure Event Hubs usando Kafka API: Bootstrap servers `<namespace>.servicebus.windows.net:9093`; Protocolo de seguridad `SASL_SSL`; Mecanismo SASL `PLAIN`; Usuario exactamente `$ConnectionString`; Contraseña = connection string completa de Event Hubs, por ejemplo `Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<key>`. Si la connection string incluye `EntityPath`, use ese mismo nombre de Event Hub como topic Kafka.
+- AWS MSK: Use la lista de brokers y el modo de autenticacion provistos por el cluster. Para autenticacion IAM/OAUTHBEARER este modulo no alcanza tal como esta; use credenciales SCRAM o PLAIN expuestas por el cluster.
+
 Sesiones:
 - Todos los comandos reciben un identificador de Sesion. Dejelo vacio para usar la conexion por defecto, o defina uno para mantener varias conexiones/consumers independientes en el mismo flujo (por ejemplo, uno por cluster o por consumer group).
 - Conectar a Kafka solo guarda la configuracion de la conexion; todavia no crea el consumer.
@@ -85,6 +99,13 @@ Uso basico:
 2. Execute Testar Conexao para confirmar que o Rocketbot consegue alcancar o cluster antes de montar o resto do fluxo.
 3. Use os comandos de topics (Listar Topics, Criar Topic, Excluir Topic, Descrever Topic, Obter Offsets) para administra-los.
 4. Use Produzir Mensagem / Produzir Batch para publicar, e Consumir Mensagens / Commit Offsets / Fechar Consumidor para ler.
+
+Exemplos de conexao:
+- Kafka local ou self-hosted sem autenticacao: Bootstrap servers `localhost:9092` ou `broker1:9092,broker2:9092`; Protocolo de seguranca `PLAINTEXT`; deixe vazios Mecanismo SASL, Usuario e Senha.
+- Kafka self-hosted com SASL: Bootstrap servers `broker1:9093,broker2:9093`; Protocolo de seguranca `SASL_SSL` ou `SASL_PLAINTEXT` conforme o cluster; Mecanismo SASL `PLAIN`, `SCRAM-SHA-256` ou `SCRAM-SHA-512`; Usuario e Senha do usuario Kafka.
+- Confluent Cloud: Bootstrap servers da configuracao do cluster, geralmente `pkc-xxxxx.region.provider.confluent.cloud:9092`; Protocolo de seguranca `SASL_SSL`; Mecanismo SASL `PLAIN`; Usuario = API key; Senha = API secret.
+- Azure Event Hubs usando Kafka API: Bootstrap servers `<namespace>.servicebus.windows.net:9093`; Protocolo de seguranca `SASL_SSL`; Mecanismo SASL `PLAIN`; Usuario exatamente `$ConnectionString`; Senha = connection string completa do Event Hubs, por exemplo `Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<key>`. Se a connection string incluir `EntityPath`, use o mesmo nome do Event Hub como topic Kafka.
+- AWS MSK: Use a lista de brokers e o modo de autenticacao fornecidos pelo cluster. Para autenticacao IAM/OAUTHBEARER este modulo nao e suficiente como esta; use credenciais SCRAM ou PLAIN expostas pelo cluster.
 
 Sessoes:
 - Todos os comandos recebem um identificador de Sessao. Deixe vazio para usar a conexao padrao, ou defina um para manter varias conexoes/consumers independentes no mesmo fluxo (por exemplo, um por cluster ou por consumer group).

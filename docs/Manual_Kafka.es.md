@@ -8,7 +8,7 @@ Módulo para producir, consumir y administrar topics de Apache Kafka. Soporta au
 
 *Read this in other languages: [English](Manual_Kafka.md), [Português](Manual_Kafka.pr.md), [Español](Manual_Kafka.es.md)*
 
-![banner](imgs/Banner_Kafka.png o jpg)
+![banner](imgs/Banner_Kafka.jpg)
 ## Como instalar este módulo
 
 Para instalar el módulo en Rocketbot Studio, se puede hacer de dos formas:
@@ -27,32 +27,40 @@ Uso basico:
 3. Use los comandos de topics (Listar Topics, Crear Topic, Eliminar Topic, Describir Topic, Obtener Offsets) para administrarlos.
 4. Use Producir Mensaje / Producir Batch para publicar, y Consumir Mensajes / Commit Offsets / Cerrar Consumidor para leer.
 
+Ejemplos de conexion:
+- Kafka local o self-hosted sin autenticacion: Bootstrap servers `localhost:9092` o `broker1:9092,broker2:9092`; Protocolo de seguridad 
+`PLAINTEXT`; deje vacios Mecanismo SASL, Usuario y Contraseña.
+- Kafka self-hosted con SASL: Bootstrap servers `broker1:9093,broker2:9093`; Protocolo de seguridad `SASL_SSL` o `SASL_PLAINTEXT` segun el cluster; Mecanismo SASL `PLAIN`, `SCRAM-SHA-256` o `SCRAM-SHA-512`; Usuario y Contraseña del usuario Kafka.
+- Confluent Cloud: Bootstrap servers desde la configuracion del cluster, normalmente `pkc-xxxxx.region.provider.confluent.cloud:9092`; Protocolo de seguridad `SASL_SSL`; Mecanismo SASL `PLAIN`; Usuario = API key; Contraseña = API secret.
+- Azure Event Hubs usando Kafka API: Bootstrap servers `<namespace>.servicebus.windows.net:9093`; Protocolo de seguridad `SASL_SSL`; Mecanismo SASL `PLAIN`; Usuario exactamente `$ConnectionString`; Contraseña = connection string completa de Event Hubs, por ejemplo `Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<key>`. Si la connection string incluye `EntityPath`, use ese mismo nombre de Event Hub 
+como topic Kafka.
+- AWS MSK: Use la lista de brokers y el modo de autenticacion provistos por el cluster. Para autenticacion IAM/OAUTHBEARER este modulo no alcanza tal como esta; use credenciales SCRAM o PLAIN expuestas por el cluster.
+
 Sesiones:
-- Todos los comandos reciben un identificador de Sesion. Dejelo vacio para usar la conexion por defecto, o defina uno para mantener varias conexiones/consumers
- independientes en el mismo flujo (por ejemplo, uno por cluster o por consumer group).
+- Todos los comandos reciben un identificador de Sesion. Dejelo vacio para usar la conexion por defecto, o defina uno para mantener varias conexiones/consumers independientes en el mismo flujo (por ejemplo, uno por cluster o por consumer group).
 - Conectar a Kafka solo guarda la configuracion de la conexion; todavia no crea el consumer.
 
 Publicar mensajes:
 - Producir Mensaje envia un unico mensaje (clave opcional; el valor puede ser texto plano o JSON).
 - Producir Batch envia una lista JSON de mensajes en una sola llamada, por ejemplo `[{"key": "1", "value": "hola"}, {"key": "2", "value": {"total": 100}}]`. Cada item puede ser un valor simple o un objeto `{key, value}`. Util cuando el robot ya tiene una lista de registros para publicar juntos.
 
+
 Consumir mensajes (flujo de consumer group):
 1. Ejecute Consumir Mensajes con Topicos (separados por coma), Group ID y Offset inicial. Estos valores, junto con Max poll interval, solo se aplican la primera vez que se crea el consumer para esa sesion; para cambiarlos despues, ejecute primero Cerrar Consumidor y vuelva a llamar Consumir Mensajes.
-2. Procese los mensajes devueltos en el robot. Cada 
-mensaje incluye su propio `topic`, `partition`, `offset`, `key` y `value`, asi puede distinguir de que topico vino cuando esta suscripto a mas de uno.
+2. Procese los mensajes devueltos en el robot. Cada mensaje incluye su propio `topic`, `partition`, `offset`, `key` y `value`, asi puede distinguir de que topico vino cuando esta suscripto a mas de uno.
 3. Ejecute Commit Offsets para indicarle a Kafka que los mensajes fueron procesados. Por defecto confirma todo el lote; si el robot solo proceso algunos, pase los exitosos en "Mensajes procesados" para confirmar solo esos (y los anteriores), dejando el resto para reintentar en la proxima lectura.
 4. Ejecute Cerrar Consumidor al terminar el flujo, o antes de cambiar Topicos, Group ID, Offset inicial o Max poll interval en la misma sesion.
 
-Notas importantes:
+Notas
+ importantes:
 - Probar Conexion nunca corta el flujo: devuelve true o false para que el robot decida segun el resultado. Si falla, el motivo se imprime en el log de ejecucion, no en la variable de resultado.
-- Commit Offsets devuelve false, sin lanzar error, cuando no habia nada nuevo que confirmar desde el ultimo commit -- esto es normal, no una falla. Si el commit en si falla (por ejemplo, el 
-consumer fue expulsado del grupo), el comando lanza un error en vez de devolver false.
+- Commit Offsets devuelve false, sin lanzar error, cuando no habia nada nuevo que confirmar desde el ultimo commit -- esto es normal, no una falla. Si el commit en si falla (por ejemplo, el consumer fue expulsado del grupo), el comando lanza un error en vez de devolver false.
 - Los valores de los mensajes se guardan y devuelven tal cual se enviaron, incluyendo espacios, saltos de linea o formato del texto original (Producir Mensaje/Batch no los recortan ni reformatean, y Consumir Mensajes los devuelve sin cambios).
 - Group ID, Offset inicial y Max poll interval aplican por igual a todos los topicos de una misma llamada a Consumir Mensajes. Para usar configuracion distinta por topico, use una sesion separada para cada uno.
-- Si Commit Offsets se ejecuta mas tarde que el Max poll interval configurado desde el ultimo Consumir Mensajes, Kafka puede haber expulsado al consumer del grupo; vuelva a ejecutar Consumir Mensajes o aumente el Max poll interval.
+- Si Commit Offsets se ejecuta mas tarde que el Max poll 
+interval configurado desde el ultimo Consumir Mensajes, Kafka puede haber expulsado al consumer del grupo; vuelva a ejecutar Consumir Mensajes o aumente el Max poll interval.
 - Eliminar Topic es irreversible y, segun la configuracion del cluster, tambien borra los mensajes del topico. Verifique bien el nombre antes de correrlo en produccion.
-- La primera vez que el modulo corre en una maquina, 
-instala automaticamente la libreria `confluent-kafka` si no hay una version compatible ya incluida; esto requiere acceso a internet en esa primera ejecucion.
+- La primera vez que el modulo corre en una maquina, instala automaticamente la libreria `confluent-kafka` si no hay una version compatible ya incluida; esto requiere acceso a internet en esa primera ejecucion.
 
 Referencias:
 - https://kafka.apache.org/documentation/
@@ -63,14 +71,14 @@ Referencias:
 
 ### Conectar a Kafka
 
-Configura la conexión al clúster Kafka (servidores, protocolo de seguridad, usuario, contraseña). Puedes usar un identificador para cambiar entre otras conexiones
+Configura la conexión al clúster Kafka. Para Apache Kafka/self-hosted use broker:9092 con PLAINTEXT o su configuración SSL/SASL. Para Confluent Cloud use SASL_SSL + PLAIN, usuario=API key y contraseña=API secret. Para Azure Event Hubs por endpoint Kafka use <namespace>.servicebus.windows.net:9093, SASL_SSL + PLAIN, usuario=$ConnectionString y contraseña=connection string completa de Event Hubs. Puede usar un identificador de sesión para cambiar entre varias conexiones
 |Parámetros|Descripción|ejemplo|
 | --- | --- | --- |
-|Bootstrap servers|Lista de brokers separados por coma (hostpuerto)|broker1:9092,broker2:9092|
+|Bootstrap servers|Lista de brokers separados por coma (hostpuerto). Ejemplos localhost9092, pkc-xxxxx.region.provider.confluent.cloud9092, namespace.servicebus.windows.net9093 para Azure Event Hubs.|broker1:9092,broker2:9092|
 |Protocolo de seguridad|Protocolo de seguridad de la conexión, por defecto PLAINTEXT||
 |Mecanismo SASL|Mecanismo de autenticación SASL, requerido si el protocolo usa SASL||
-|Usuario|Usuario SASL (API key en Confluent Cloud)|usuario|
-|Contraseña|Contraseña SASL (API secret en Confluent Cloud)|secr3t_p@ss|
+|Usuario|Usuario SASL. En Confluent Cloud es la API key; en Azure Event Hubs con Kafka debe ser $ConnectionString.|usuario|
+|Contraseña|Contraseña SASL. En Confluent Cloud es el API secret; en Azure Event Hubs es la connection string completa.|secr3t_p@ss|
 |Sesión|Identificador de la conexión, si se deja vacío se usará la conexión por defecto|Conn1|
 |Resultado|Variable donde se almacena el resultado de la conexión|conectado|
 

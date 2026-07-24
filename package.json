@@ -26,19 +26,19 @@
     {
       "en": {
         "title": "Connect Kafka",
-        "description": "Configures the connection to the Kafka cluster (bootstrap servers, security protocol, user, password). Can use an identifier to switch between multiple connections",
+        "description": "Configures the connection to the Kafka cluster. For Apache Kafka/self-hosted use broker:9092 with PLAINTEXT or your SSL/SASL settings. For Confluent Cloud use SASL_SSL + PLAIN, username=API key and password=API secret. For Azure Event Hubs Kafka endpoint use <namespace>.servicebus.windows.net:9093, SASL_SSL + PLAIN, username=$ConnectionString and password=the full Event Hubs connection string. You can use a session identifier to switch between multiple connections",
         "title_options": null,
         "options": null
       },
       "es": {
         "title": "Conectar a Kafka",
-        "description": "Configura la conexión al clúster Kafka (servidores, protocolo de seguridad, usuario, contraseña). Puedes usar un identificador para cambiar entre otras conexiones",
+        "description": "Configura la conexión al clúster Kafka. Para Apache Kafka/self-hosted use broker:9092 con PLAINTEXT o su configuración SSL/SASL. Para Confluent Cloud use SASL_SSL + PLAIN, usuario=API key y contraseña=API secret. Para Azure Event Hubs por endpoint Kafka use <namespace>.servicebus.windows.net:9093, SASL_SSL + PLAIN, usuario=$ConnectionString y contraseña=connection string completa de Event Hubs. Puede usar un identificador de sesión para cambiar entre varias conexiones",
         "title_options": null,
         "options": null
       },
       "pr": {
         "title": "Conectar ao Kafka",
-        "description": "Configura a conexão com o cluster Kafka (servidores, protocolo de segurança, usuário, senha). Pode usar um identificador para alternar entre outras conexões",
+        "description": "Configura a conexão com o cluster Kafka. Para Apache Kafka/self-hosted use broker:9092 com PLAINTEXT ou sua configuracao SSL/SASL. Para Confluent Cloud use SASL_SSL + PLAIN, usuario=API key e senha=API secret. Para Azure Event Hubs pelo endpoint Kafka use <namespace>.servicebus.windows.net:9093, SASL_SSL + PLAIN, usuario=$ConnectionString e senha=connection string completa do Event Hubs. Pode usar um identificador de sessao para alternar entre varias conexoes",
         "title_options": null,
         "options": null
       },
@@ -58,9 +58,9 @@
               "pr": "Bootstrap servers:"
             },
             "description": {
-              "es": "Lista de brokers separados por coma (host:puerto)",
-              "en": "Comma-separated list of brokers (host:port)",
-              "pr": "Lista de brokers separados por vírgula (host:porta)"
+              "es": "Lista de brokers separados por coma (host:puerto). Ejemplos: localhost:9092, pkc-xxxxx.region.provider.confluent.cloud:9092, namespace.servicebus.windows.net:9093 para Azure Event Hubs.",
+              "en": "Comma-separated list of brokers (host:port). Examples: localhost:9092, pkc-xxxxx.region.provider.confluent.cloud:9092, namespace.servicebus.windows.net:9093 for Azure Event Hubs.",
+              "pr": "Lista de brokers separados por virgula (host:porta). Exemplos: localhost:9092, pkc-xxxxx.region.provider.confluent.cloud:9092, namespace.servicebus.windows.net:9093 para Azure Event Hubs."
             },
             "id": "bootstrap_servers",
             "css": "col-md-12",
@@ -121,9 +121,9 @@
               "pr": "Usuário:"
             },
             "description": {
-              "es": "Usuario SASL (API key en Confluent Cloud)",
-              "en": "SASL username (API key on Confluent Cloud)",
-              "pr": "Usuário SASL (API key no Confluent Cloud)"
+              "es": "Usuario SASL. En Confluent Cloud es la API key; en Azure Event Hubs con Kafka debe ser $ConnectionString.",
+              "en": "SASL username. On Confluent Cloud this is the API key; on Azure Event Hubs with Kafka it must be $ConnectionString.",
+              "pr": "Usuario SASL. No Confluent Cloud e a API key; no Azure Event Hubs com Kafka deve ser $ConnectionString."
             },
             "id": "username",
             "css": "col-md-6"
@@ -141,9 +141,9 @@
               "pr": "Senha:"
             },
             "description": {
-              "es": "Contraseña SASL (API secret en Confluent Cloud)",
-              "en": "SASL password (API secret on Confluent Cloud)",
-              "pr": "Senha SASL (API secret no Confluent Cloud)"
+              "es": "Contraseña SASL. En Confluent Cloud es el API secret; en Azure Event Hubs es la connection string completa.",
+              "en": "SASL password. On Confluent Cloud this is the API secret; on Azure Event Hubs this is the full connection string.",
+              "pr": "Senha SASL. No Confluent Cloud e o API secret; no Azure Event Hubs e a connection string completa."
             },
             "id": "password",
             "css": "col-md-6"
