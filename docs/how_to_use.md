@@ -6,7 +6,7 @@ Basic usage:
 1. Run Connect Kafka with the bootstrap servers and, if required, the security protocol and SASL credentials. Optionally set a Session identifier to keep several connections open at once.
 2. Run Test Connection to confirm Rocketbot can reach the cluster before building the rest of the flow.
 3. Use the topic commands (List Topics, Create Topic, Delete Topic, Describe Topic, Get Offsets) to manage topics.
-4. Use Produce Message / Produce Batch to publish, and Consume Messages / Commit Offsets / Close Consumer to read.
+4. Use Produce Message / Produce Batch to publish, and Consume Messages / Commit Offsets / Close Consumer to read. Use Close Kafka Session at the end of the flow to release all resources for a session.
 
 Connection examples:
 - Local or self-hosted Kafka without authentication: Bootstrap servers `localhost:9092` or `broker1:9092,broker2:9092`; Security protocol `PLAINTEXT`; leave SASL mechanism, Username and Password empty.
@@ -18,6 +18,8 @@ Connection examples:
 Sessions:
 - Every command takes a Session identifier. Leave it empty to use the default connection, or set one to keep several independent connections/consumers open in the same flow (for example, one per cluster or per consumer group).
 - Connect Kafka only stores the connection settings; it does not create the consumer yet.
+- Each session can have one active consumer. To run independent consumers with different topics, groups or offsets, use different sessions.
+- Close Kafka Session closes the session's producer and consumer, then removes the session. It does not commit consumed offsets automatically.
 
 Producing messages:
 - Produce Message sends a single message (key optional; the value can be plain text or JSON).
@@ -34,6 +36,7 @@ Important notes:
 - Commit Offsets returns false, without raising an error, when there was nothing new to confirm since the last commit -- this is normal, not a failure. If the commit itself fails (for example, the consumer was evicted from the group), the command raises an error instead of returning false.
 - Message values are stored and returned exactly as sent, including any whitespace, line breaks or formatting from the original text (Produce Message/Batch do not trim or reformat them, and Consume Messages returns them unchanged).
 - Group ID, Initial offset and Max poll interval apply equally to every topic listed in a single Consume Messages call. To use different settings per topic, use a separate session for each one.
+- If Initial offset is left empty, the module uses Kafka's `latest` behavior by default. This avoids processing old messages when a consumer group has no committed offset, but it also means that after consuming messages without Commit Offsets, closing the consumer and creating it again may return an empty list instead of redelivering those previous messages. Use `earliest` explicitly when you need to read from the first available offset for a new/uncommitted group, such as in tests or controlled reprocessing.
 - If Commit Offsets runs later than the configured Max poll interval after the last Consume Messages call, Kafka may have already evicted the consumer from the group; run Consume Messages again or increase Max poll interval.
 - Delete Topic is irreversible and, depending on the cluster configuration, also deletes the topic's messages. Double-check the topic name before running it in production.
 - The first time the module runs on a machine, it installs the `confluent-kafka` client library automatically if a compatible version is not already bundled; this requires internet access on that first run.
@@ -52,7 +55,7 @@ Uso basico:
 1. Ejecute Conectar a Kafka con los bootstrap servers y, si corresponde, el protocolo de seguridad y las credenciales SASL. Opcionalmente defina un identificador de Sesion para mantener varias conexiones abiertas a la vez.
 2. Ejecute Probar Conexion para confirmar que Rocketbot puede llegar al cluster antes de armar el resto del flujo.
 3. Use los comandos de topics (Listar Topics, Crear Topic, Eliminar Topic, Describir Topic, Obtener Offsets) para administrarlos.
-4. Use Producir Mensaje / Producir Batch para publicar, y Consumir Mensajes / Commit Offsets / Cerrar Consumidor para leer.
+4. Use Producir Mensaje / Producir Batch para publicar, y Consumir Mensajes / Commit Offsets / Cerrar Consumidor para leer. Use Cerrar Sesion Kafka al final del flujo para liberar todos los recursos de una sesion.
 
 Ejemplos de conexion:
 - Kafka local o self-hosted sin autenticacion: Bootstrap servers `localhost:9092` o `broker1:9092,broker2:9092`; Protocolo de seguridad `PLAINTEXT`; deje vacios Mecanismo SASL, Usuario y Contraseña.
@@ -64,6 +67,8 @@ Ejemplos de conexion:
 Sesiones:
 - Todos los comandos reciben un identificador de Sesion. Dejelo vacio para usar la conexion por defecto, o defina uno para mantener varias conexiones/consumers independientes en el mismo flujo (por ejemplo, uno por cluster o por consumer group).
 - Conectar a Kafka solo guarda la configuracion de la conexion; todavia no crea el consumer.
+- Cada sesion puede tener un consumer activo. Para usar consumers independientes con distintos topicos, grupos u offsets, use sesiones diferentes.
+- Cerrar Sesion Kafka cierra el producer y consumer de la sesion, y luego elimina la sesion. No confirma offsets consumidos automaticamente.
 
 Publicar mensajes:
 - Producir Mensaje envia un unico mensaje (clave opcional; el valor puede ser texto plano o JSON).
@@ -80,6 +85,7 @@ Notas importantes:
 - Commit Offsets devuelve false, sin lanzar error, cuando no habia nada nuevo que confirmar desde el ultimo commit -- esto es normal, no una falla. Si el commit en si falla (por ejemplo, el consumer fue expulsado del grupo), el comando lanza un error en vez de devolver false.
 - Los valores de los mensajes se guardan y devuelven tal cual se enviaron, incluyendo espacios, saltos de linea o formato del texto original (Producir Mensaje/Batch no los recortan ni reformatean, y Consumir Mensajes los devuelve sin cambios).
 - Group ID, Offset inicial y Max poll interval aplican por igual a todos los topicos de una misma llamada a Consumir Mensajes. Para usar configuracion distinta por topico, use una sesion separada para cada uno.
+- Si Offset inicial queda vacio, el modulo usa por defecto el comportamiento `latest` de Kafka. Esto evita procesar mensajes viejos cuando un consumer group no tiene offset confirmado, pero tambien significa que despues de consumir mensajes sin ejecutar Commit Offsets, cerrar el consumer y crearlo de nuevo puede devolver una lista vacia en vez de entregar otra vez esos mensajes anteriores. Use `earliest` explicitamente cuando necesite leer desde el primer offset disponible para un grupo nuevo/sin commits, por ejemplo en pruebas o reprocesos controlados.
 - Si Commit Offsets se ejecuta mas tarde que el Max poll interval configurado desde el ultimo Consumir Mensajes, Kafka puede haber expulsado al consumer del grupo; vuelva a ejecutar Consumir Mensajes o aumente el Max poll interval.
 - Eliminar Topic es irreversible y, segun la configuracion del cluster, tambien borra los mensajes del topico. Verifique bien el nombre antes de correrlo en produccion.
 - La primera vez que el modulo corre en una maquina, instala automaticamente la libreria `confluent-kafka` si no hay una version compatible ya incluida; esto requiere acceso a internet en esa primera ejecucion.
@@ -98,7 +104,7 @@ Uso basico:
 1. Execute Conectar ao Kafka com os bootstrap servers e, se necessario, o protocolo de seguranca e as credenciais SASL. Opcionalmente defina um identificador de Sessao para manter varias conexoes abertas ao mesmo tempo.
 2. Execute Testar Conexao para confirmar que o Rocketbot consegue alcancar o cluster antes de montar o resto do fluxo.
 3. Use os comandos de topics (Listar Topics, Criar Topic, Excluir Topic, Descrever Topic, Obter Offsets) para administra-los.
-4. Use Produzir Mensagem / Produzir Batch para publicar, e Consumir Mensagens / Commit Offsets / Fechar Consumidor para ler.
+4. Use Produzir Mensagem / Produzir Batch para publicar, e Consumir Mensagens / Commit Offsets / Fechar Consumidor para ler. Use Fechar Sessao Kafka no final do fluxo para liberar todos os recursos de uma sessao.
 
 Exemplos de conexao:
 - Kafka local ou self-hosted sem autenticacao: Bootstrap servers `localhost:9092` ou `broker1:9092,broker2:9092`; Protocolo de seguranca `PLAINTEXT`; deixe vazios Mecanismo SASL, Usuario e Senha.
@@ -110,6 +116,8 @@ Exemplos de conexao:
 Sessoes:
 - Todos os comandos recebem um identificador de Sessao. Deixe vazio para usar a conexao padrao, ou defina um para manter varias conexoes/consumers independentes no mesmo fluxo (por exemplo, um por cluster ou por consumer group).
 - Conectar ao Kafka apenas guarda a configuracao da conexao; ainda nao cria o consumer.
+- Cada sessao pode ter um consumer ativo. Para usar consumers independentes com topicos, grupos ou offsets diferentes, use sessoes diferentes.
+- Fechar Sessao Kafka fecha o producer e o consumer da sessao, e depois remove a sessao. Nao confirma offsets consumidos automaticamente.
 
 Publicar mensagens:
 - Produzir Mensagem envia uma unica mensagem (chave opcional; o valor pode ser texto simples ou JSON).
@@ -126,6 +134,7 @@ Notas importantes:
 - Commit Offsets retorna false, sem lancar erro, quando nao havia nada novo para confirmar desde o ultimo commit -- isso e normal, nao uma falha. Se o commit em si falhar (por exemplo, o consumer foi removido do grupo), o comando lanca um erro em vez de retornar false.
 - Os valores das mensagens sao armazenados e retornados exatamente como foram enviados, incluindo espacos, quebras de linha ou formatacao do texto original (Produzir Mensagem/Batch nao os recortam nem reformatam, e Consumir Mensagens os retorna sem alteracoes).
 - Group ID, Offset inicial e Max poll interval se aplicam igualmente a todos os topicos de uma mesma chamada de Consumir Mensagens. Para usar configuracao diferente por topico, use uma sessao separada para cada um.
+- Se Offset inicial ficar vazio, o modulo usa por padrao o comportamento `latest` do Kafka. Isso evita processar mensagens antigas quando um consumer group nao tem offset confirmado, mas tambem significa que depois de consumir mensagens sem executar Commit Offsets, fechar o consumer e cria-lo novamente pode retornar uma lista vazia em vez de entregar novamente essas mensagens anteriores. Use `earliest` explicitamente quando precisar ler desde o primeiro offset disponivel para um grupo novo/sem commits, por exemplo em testes ou reprocessamentos controlados.
 - Se Commit Offsets rodar mais tarde que o Max poll interval configurado desde o ultimo Consumir Mensagens, o Kafka pode ja ter removido o consumer do grupo; execute Consumir Mensagens novamente ou aumente o Max poll interval.
 - Excluir Topic e irreversivel e, dependendo da configuracao do cluster, tambem apaga as mensagens do topico. Confira bem o nome antes de rodar isso em producao.
 - Na primeira vez que o modulo roda em uma maquina, ele instala automaticamente a biblioteca `confluent-kafka` caso nao haja uma versao compativel ja incluida; isso requer acesso a internet nessa primeira execucao.

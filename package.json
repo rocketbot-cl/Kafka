@@ -949,19 +949,19 @@
     {
       "en": {
         "title": "Consume Messages",
-        "description": "Reads messages from one or more topics, each tagged with its own 'topic' field. Limited by message count and timeout. The consumer (topics, group ID, initial offset, max poll interval) is created on the session's first call and reused afterwards; run 'Close Consumer' first to change those settings",
+        "description": "Create a consumer that reads messages from one or more topics, each tagged with its own 'topic' field. Limited by message count and timeout. The consumer (topics, group ID, initial offset, max poll interval) is created on the session's first call and reused afterwards; run 'Close Consumer' first to change those settings",
         "title_options": null,
         "options": null
       },
       "es": {
         "title": "Consumir Mensajes",
-        "description": "Lee mensajes de uno o varios topics, cada uno con su propio campo 'topic'. Tiene límite de cantidad y de tiempo. El consumer (topics, group ID, offset inicial, max poll interval) se crea en la primera llamada de la sesión y se reutiliza después; ejecute 'Cerrar Consumidor' primero para cambiar esos valores",
+        "description": "Crea un consumer que lee mensajes de uno o varios topics, cada uno con su propio campo 'topic'. Tiene límite de cantidad y de tiempo. El consumer (topics, group ID, offset inicial, max poll interval) se crea en la primera llamada de la sesión y se reutiliza después; ejecute 'Cerrar Consumidor' primero para cambiar esos valores",
         "title_options": null,
         "options": null
       },
       "pr": {
         "title": "Consumir Mensagens",
-        "description": "Lê mensagens de um ou vários topics, cada uma com seu próprio campo 'topic'. Tem limite de quantidade e de tempo. O consumer (topics, group ID, offset inicial, max poll interval) é criado na primeira chamada da sessão e reutilizado depois; execute 'Fechar Consumidor' primeiro para alterar esses valores",
+        "description": "Cria um consumer que lê mensagens de um ou vários topics, cada uma com seu próprio campo 'topic'. Tem limite de quantidade e de tempo. O consumer (topics, group ID, offset inicial, max poll interval) é criado na primeira chamada da sessão e reutilizado depois; execute 'Fechar Consumidor' primeiro para alterar esses valores",
         "title_options": null,
         "options": null
       },
@@ -1213,6 +1213,67 @@
       "video_youtube": "",
       "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
       "module": "close_consumer",
+      "module_name": "Kafka",
+      "visible": true,
+      "options": false,
+      "father": "module",
+      "group": "scripts",
+      "linux": true,
+      "windows": true,
+      "mac": true,
+      "docker": true
+    },
+    {
+      "en": {
+        "title": "Close Session",
+        "description": "Closes the active producer and consumer for the selected session, frees their resources and removes the session. It does not commit consumed offsets automatically",
+        "title_options": null,
+        "options": null
+      },
+      "es": {
+        "title": "Cerrar Sesión",
+        "description": "Cierra el producer y consumer activos de la sesión indicada, libera sus recursos y elimina la sesión. No confirma offsets consumidos automáticamente",
+        "title_options": null,
+        "options": null
+      },
+      "pr": {
+        "title": "Fechar Sessão",
+        "description": "Fecha o producer e o consumer ativos da sessão indicada, libera seus recursos e remove a sessão. Não confirma offsets consumidos automaticamente",
+        "title_options": null,
+        "options": null
+      },
+      "form": {
+        "css": "modal-md",
+        "inputs": [
+          {
+            "type": "input",
+            "placeholder": { "es": "Conn1", "en": "Conn1", "pr": "Conn1" },
+            "title": { "es": "Sesión:", "en": "Session:", "pr": "Sessão:" },
+            "description": {
+              "es": "Identificador de la conexión",
+              "en": "Connection identifier",
+              "pr": "Identificador de conexão"
+            },
+            "id": "session",
+            "css": "col-md-6"
+          },
+          {
+            "type": "input",
+            "placeholder": { "es": "10", "en": "10", "pr": "10" },
+            "title": { "es": "Timeout flush (segundos):", "en": "Flush timeout (seconds):", "pr": "Timeout flush (segundos):" },
+            "description": {
+              "es": "Tiempo máximo para esperar a que el producer envíe mensajes pendientes antes de cerrar la sesión. Por defecto 10",
+              "en": "Maximum time to wait for the producer to send pending messages before closing the session. Default 10",
+              "pr": "Tempo máximo para esperar o producer enviar mensagens pendentes antes de fechar a sessão. Padrão 10"
+            },
+            "id": "timeout",
+            "css": "col-md-6"
+          }
+        ]
+      },
+      "video_youtube": "",
+      "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMzI3LjAwMDAwMHB0IiBoZWlnaHQ9IjM1NS4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDMyNy4wMDAwMDAgMzU1LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMzU1LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTE1ODQgMzI3MCBjLTU2IC0xMiAtOTMgLTMxIC00ODIgLTI1NCAtNzA3IC00MDYgLTcwNSAtNDA0IC03NjQKLTUyNCBsLTMzIC02NyAtMyAtNTcwIGMtNCAtNjQzIDIgLTc1OSA0MiAtODI4IDQwIC02OCAxMDggLTEyNSAyNDEgLTIwNCAxODYKLTExMCA2NzUgLTM5MSA4MjUgLTQ3NCBsMTM1IC03NCAxMTUgMCAxMTUgMCAxMTUgNjYgYzYzIDM2IDE0MiA4MSAxNzUgOTkgODkKNTAgMjQxIDEzNyAzMjAgMTg1IDM5IDIzIDEzNSA4MCAyMTUgMTI1IDE5MyAxMTEgMzEzIDE5MyAzMzkgMjI5IDEyIDE3IDMyIDUyCjQ0IDc4IDIyIDQ4IDIyIDUxIDI1IDY5NyAzIDcxOCA1IDY5NiAtNjIgNzkwIC00MCA1NyAtOTAgOTYgLTIzOCAxODUgLTE5OQoxMTkgLTgzNyA0ODIgLTkwMiA1MTIgLTY4IDMxIC0xNTcgNDMgLTIyMiAyOXogbTUwIC03OTAgYzY1IC00NSA5OCAtMTMwIDgyCi0yMTUgLTggLTQzIC02MyAtMTA2IC0xMTEgLTEyOSAtMzMgLTE2IC0zNSAtMjAgLTM1IC02NSAwIC00OCAxIC00OSA0MyAtNjYKMjMgLTkgNTcgLTI4IDc2IC00MyBsMzQgLTI1IDQ0IDIzIDQzIDIzIDAgNjYgYzAgNTUgNCA3MyAyMyA5OSA1MCA2NyAxMTkgOTkKMTk1IDg4IDYxIC04IDEwNyAtMzkgMTM4IC05MiAyMyAtMzkgMjYgLTUzIDIyIC0xMTMgLTMgLTU1IC05IC03NSAtMzAgLTEwNAotNjIgLTgwIC0xODIgLTEwMCAtMjY3IC00NCBsLTM5IDI2IC0zOSAtMjEgLTM4IC0yMSAxIC05NCAxIC05NSAzMiAtMjAgMzIKLTIxIDQ4IDI3IGM1NyAzMCAxNTMgMzYgMjAwIDEyIDEwNSAtNTUgMTM3IC0xOTkgNjYgLTI5MiAtNDEgLTU0IC04MSAtNzQKLTE0NyAtNzQgLTY4IDAgLTEwMyAxMiAtMTQxIDQ4IC00MSAzOCAtNTQgNjggLTYxIDE0MiAtNyA2MiAtOSA2NiAtNDMgODYKbC0zNyAyMSAtNDggLTM0IGMtMjYgLTE5IC02MCAtMzggLTc1IC00MiAtMjUgLTcgLTI4IC0xMiAtMzEgLTU4IGwtMyAtNTEgNDYKLTIyIGMyOSAtMTQgNTYgLTM4IDczIC02MyAyMyAtMzUgMjcgLTUxIDI3IC0xMTIgMCAtNjIgLTQgLTc3IC0yOCAtMTEyIC03OAotMTEyIC0yNTYgLTExMiAtMzIyIDEgLTY0IDEwOSAtMzEgMjMyIDc2IDI4NyAzOCAxOSAzOSAyMSAzOSA3MyBsMCA1MyAtNDEgMTIKYy01NSAxNyAtMTIyIDg1IC0xNDIgMTQ2IC0zNiAxMDQgLTEzIDIwMCA2NCAyNjkgMjcgMjUgNjUgNTAgODQgNTYgMzQgMTEgMzUKMTQgMzUgNjAgMCA0NyAtMiA0OSAtNDIgNzIgLTE0NCA3OSAtMTQwIDI4MSA3IDM1MCA1MyAyNSAxNDMgMTkgMTg5IC0xMnoiLz4KPHBhdGggZD0iTTE0NzYgMjM3OCBjLTQwIC0zNSAtNDMgLTc4IC0xMSAtMTE2IDQxIC00OSAxMTAgLTM5IDE0MCAxOSA0MiA3OQotNjEgMTU2IC0xMjkgOTd6Ii8+CjxwYXRoIGQ9Ik0xOTQ0IDIxMDYgYy01OCAtNDkgLTIwIC0xNDYgNTYgLTE0NiAxNiAwIDQxIDExIDU2IDI0IDU4IDQ5IDIwIDE0NgotNTYgMTQ2IC0xNiAwIC00MSAtMTEgLTU2IC0yNHoiLz4KPHBhdGggZD0iTTE0NTggMTg3NSBjLTg0IC01NyAtNjggLTE4MSAyOSAtMjIxIDg1IC0zNiAxODcgNTAgMTY3IDE0MCAtMjEgOTYKLTExNiAxMzUgLTE5NiA4MXoiLz4KPHBhdGggZD0iTTE5NTEgMTU2NCBjLTYwIC01MCAtMzIgLTE0NCA0MiAtMTQ0IDkzIDAgMTI3IDExNCA0NiAxNTUgLTM5IDIxCi01MyAxOSAtODggLTExeiIvPgo8cGF0aCBkPSJNMTQ3NyAxMjg5IGMtMTUgLTEzIC0zMCAtMzggLTMzIC01NiAtNSAtMjcgLTEgLTM3IDI0IC02MyAzOSAtMzggODMKLTQwIDExNyAtNSA1MCA0OSAyNCAxMzAgLTQ2IDE0MSAtMjggNSAtNDEgMSAtNjIgLTE3eiIvPgo8L2c+Cjwvc3ZnPgo=",
+      "module": "close_session",
       "module_name": "Kafka",
       "visible": true,
       "options": false,

@@ -458,3 +458,23 @@ class KafkaObject:
             conn["consumer"].close()
             conn["consumer"] = None
         return True
+
+    def close_session_command(self, session, timeout=None):
+        session = session or SESSION_DEFAULT
+        conn = self.require_session(session)
+
+        if conn["producer"] is not None:
+            remaining = conn["producer"].flush(float(timeout) if timeout else 10.0)
+            if remaining:
+                raise Exception(
+                    "Could not close session '%s' because %d producer message(s) are still pending. "
+                    "Increase the flush timeout or retry later." % (session, remaining)
+                )
+            conn["producer"] = None
+
+        if conn["consumer"] is not None:
+            conn["consumer"].close()
+            conn["consumer"] = None
+
+        del self.sessions[session]
+        return True

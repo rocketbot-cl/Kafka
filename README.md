@@ -46,13 +46,16 @@ Sends a single message to a topic. For example, publishing a JSON with invoice, 
 Sends several messages together to a topic. Useful when the bot has a list of records to publish all at once
 
 10. Consume Messages
-Reads messages from one or more topics, each tagged with its own 'topic' field. Limited by message count and timeout. The consumer (topics, group ID, initial offset, max poll interval) is created on the session's first call and reused afterwards; run 'Close Consumer' first to change those settings
+Create a consumer that reads messages from one or more topics, each tagged with its own 'topic' field. Limited by message count and timeout. The consumer (topics, group ID, initial offset, max poll interval) is created on the session's first call and reused afterwards; run 'Close Consumer' first to change those settings
 
 11. Commit Offsets
 Confirms that consumed messages were processed and tells Kafka where to continue the next read. By default commits the whole batch from 'Consume Messages'; use 'Processed messages' to commit only up to the last successful one instead
 
 12. Close Consumer
 Closes the consumer session and frees its resources. Required before changing consumer settings (Group ID, Initial offset, Max poll interval) on the next 'Consume Messages' call
+
+13. Close Session
+Closes the active producer and consumer for the selected session, frees their resources and removes the session. It does not commit consumed offsets automatically
 
 
 

@@ -19,6 +19,7 @@ v1 commands (module):
     consume         -> polls for pending messages on one or more topics
     commit          -> confirms the offsets consumed by the session
     close_consumer  -> closes the session's consumer and releases its resources
+    close_session   -> closes producer/consumer resources and removes the session
 
 Pending v2 roadmap:
     Kafka Connect: list/create/status/pause/resume/restart/delete connectors
@@ -223,6 +224,16 @@ elif module == "close_consumer":
 
     try:
         mod_Kafka.close_consumer_command(session)
+    except Exception as e:
+        PrintException()
+        raise e
+
+elif module == "close_session":
+    session = GetParams("session")
+    timeout = GetParams("timeout")
+
+    try:
+        mod_Kafka.close_session_command(session, timeout)
     except Exception as e:
         PrintException()
         raise e
