@@ -23,41 +23,45 @@ Basic usage:
 1. Run Connect Kafka with the bootstrap servers and, if required, the security protocol and SASL credentials. Optionally set a Session identifier to keep several connections open at once.
 2. Run Test Connection to confirm Rocketbot can reach the cluster before building the rest of the flow.
 3. Use the topic commands (List Topics, Create Topic, Delete Topic, Describe Topic, Get Offsets) to manage topics.
-4. Use Produce Message / Produce Batch to publish, and Consume Messages / Commit Offsets / Close Consumer to read.
+4. Use Produce Message / Produce Batch to publish, and Consume Messages / Commit Offsets / Close Consumer to read. Use Close Kafka Session at the end of the flow to release all resources for a session.
 
 Connection examples:
-- Local or self-hosted Kafka without authentication: Bootstrap servers `localhost:9092` or `broker1:9092,broker2:9092`; Security protocol `PLAINTEXT`; leave SASL mechanism, Username and Password empty.
-- Self-hosted 
-Kafka with SASL: Bootstrap servers `broker1:9093,broker2:9093`; Security protocol `SASL_SSL` or `SASL_PLAINTEXT` according to the cluster; SASL mechanism `PLAIN`, `SCRAM-SHA-256` or `SCRAM-SHA-512`; Username and Password from your Kafka user.
+- Local or self-hosted Kafka without authentication: Bootstrap servers `localhost:9092` or `broker1:9092,broker2:9092`; Security 
+protocol `PLAINTEXT`; leave SASL mechanism, Username and Password empty.
+- Self-hosted Kafka with SASL: Bootstrap servers `broker1:9093,broker2:9093`; Security protocol `SASL_SSL` or `SASL_PLAINTEXT` according to the cluster; SASL mechanism `PLAIN`, `SCRAM-SHA-256` or `SCRAM-SHA-512`; Username and Password from your Kafka user.
 - Confluent Cloud: Bootstrap servers from Cluster settings, usually `pkc-xxxxx.region.provider.confluent.cloud:9092`; Security protocol `SASL_SSL`; SASL mechanism `PLAIN`; Username = API key; Password = API secret.
 - Azure Event Hubs using Kafka API: Bootstrap servers `<namespace>.servicebus.windows.net:9093`; Security protocol `SASL_SSL`; SASL mechanism `PLAIN`; Username exactly `$ConnectionString`; Password = the full Event Hubs connection string, for example `Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<key>`. If the connection string includes `EntityPath`, use the same Event Hub name as the Kafka topic.
-- AWS MSK: Use the broker list and authentication mode provided by the cluster. For 
-IAM/OAUTHBEARER authentication this module is not enough as-is; use SCRAM or PLAIN credentials exposed by the cluster.
+- 
+AWS MSK: Use the broker list and authentication mode provided by the cluster. For IAM/OAUTHBEARER authentication this module is not enough as-is; use SCRAM or PLAIN credentials exposed by the cluster.
 
 Sessions:
 - Every command takes a Session identifier. Leave it empty to use the default connection, or set one to keep several independent connections/consumers open in the same flow (for example, one per cluster or per consumer group).
 - Connect Kafka only stores the connection settings; it does not create the consumer yet.
+- Each session can have one active consumer. To run independent consumers with different topics, groups or offsets, use different sessions.
+- Close Kafka Session closes the session's producer and consumer, then removes the session. It does not commit consumed offsets automatically.
 
 Producing messages:
 - Produce Message sends a single message (key optional; the value can be plain text or JSON).
-- Produce Batch sends a JSON list of messages in one call, for example `[{"key": "1", "value": "hello"}, {"key": "2", "value": {"total": 100}}]`. Each item can be a plain value or a `{key, value}` object. Useful when the bot already has a list of records to publish together.
+- Produce Batch sends a JSON list of messages in one call, for example 
+`[{"key": "1", "value": "hello"}, {"key": "2", "value": {"total": 100}}]`. Each item can be a plain value or a `{key, value}` object. Useful when the bot already has a list of records to publish together.
 
 Consuming messages (consumer group flow):
-1. Run Consume Messages with Topics (comma-separated), Group ID and Initial offset. These, together with Max poll 
-interval, are only applied the first time the consumer is created for that session; to change them later, run Close Consumer first and call Consume Messages again.
+1. Run Consume Messages with Topics (comma-separated), Group ID and Initial offset. These, together with Max poll interval, are only applied the first time the consumer is created for that session; to change them later, run Close Consumer first and call Consume Messages again.
 2. Process the returned messages in the bot. Each message includes its own `topic`, `partition`, `offset`, `key` and `value`, so you can tell which topic it came from when subscribed to more than one.
-3. Run Commit Offsets to tell Kafka the messages were processed. By default it commits the whole batch; if the bot only processed some of the messages, pass the successful ones in "Processed messages" so only those (and earlier ones) are committed, and the rest are redelivered on the next read.
+3. Run Commit Offsets to tell Kafka the messages were processed. By default it commits the whole batch; if the bot only processed some of the messages, pass the successful ones in "Processed messages" so only those (and earlier ones) are committed, and the rest are 
+redelivered on the next read.
 4. Run Close Consumer when the flow finishes, or before changing Topics, Group ID, Initial offset or Max poll interval on the same session.
 
 Important notes:
-- Test Connection never stops the flow: it returns true or false so the bot can branch on the result. On failure, the reason is printed to the execution log, not returned in the 
-result variable.
+- Test Connection never stops the flow: it returns true or false so the bot can branch on the result. On failure, the reason is printed to the execution log, not returned in the result variable.
 - Commit Offsets returns false, without raising an error, when there was nothing new to confirm since the last commit -- this is normal, not a failure. If the commit itself fails (for example, the consumer was evicted from the group), the command raises an error instead of returning false.
 - Message values are stored and returned exactly as sent, including any whitespace, line breaks or formatting from the original text (Produce Message/Batch do not trim or reformat them, and Consume Messages returns them unchanged).
-- Group ID, Initial offset and Max poll interval apply equally to every topic listed in a single Consume Messages call. To use different settings per topic, use a separate session for each one.
+- Group ID, Initial offset and Max poll interval apply equally to every topic listed in a 
+single Consume Messages call. To use different settings per topic, use a separate session for each one.
+- If Initial offset is left empty, the module uses Kafka's `latest` behavior by default. This avoids processing old messages when a consumer group has no committed offset, but it also means that after consuming messages without Commit Offsets, closing the consumer and creating it again may return an empty list instead of redelivering those previous messages. Use `earliest` explicitly when you need to read from the first available offset for a new/uncommitted group, such as in tests or controlled reprocessing.
 - If Commit Offsets runs later than the configured Max poll interval after the last Consume Messages call, Kafka may have already evicted the consumer from the group; run Consume Messages again or increase Max poll interval.
-- Delete Topic is irreversible and, 
-depending on the cluster configuration, also deletes the topic's messages. Double-check the topic name before running it in production.
+- Delete Topic is irreversible and, depending on the cluster configuration, also deletes the topic's messages. Double-check the topic name before running it
+ in production.
 - The first time the module runs on a machine, it installs the `confluent-kafka` client library automatically if a compatible version is not already bundled; this requires internet access on that first run.
 
 References:
@@ -161,7 +165,7 @@ Sends several messages together to a topic. Useful when the bot has a list of re
 
 ### Consume Messages
 
-Reads messages from one or more topics, each tagged with its own 'topic' field. Limited by message count and timeout. The consumer (topics, group ID, initial offset, max poll interval) is created on the session's first call and reused afterwards; run 'Close Consumer' first to change those settings
+Create a consumer that reads messages from one or more topics, each tagged with its own 'topic' field. Limited by message count and timeout. The consumer (topics, group ID, initial offset, max poll interval) is created on the session's first call and reused afterwards; run 'Close Consumer' first to change those settings
 |Parameters|Description|example|
 | --- | --- | --- |
 |Topics|Topics to consume, comma-separated. If you list more than one, each message can come from any of them; the 'topic' field tells you which one|topic1,topic2|
@@ -188,3 +192,11 @@ Closes the consumer session and frees its resources. Required before changing co
 |Parameters|Description|example|
 | --- | --- | --- |
 |Session|Connection identifier|Conn1|
+
+### Close Session
+
+Closes the active producer and consumer for the selected session, frees their resources and removes the session. It does not commit consumed offsets automatically
+|Parameters|Description|example|
+| --- | --- | --- |
+|Session|Connection identifier|Conn1|
+|Flush timeout (seconds)|Maximum time to wait for the producer to send pending messages before closing the session. Default 10|10|

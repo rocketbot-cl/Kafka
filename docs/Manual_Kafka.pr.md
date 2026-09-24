@@ -25,47 +25,50 @@ Uso basico:
 1. Execute Conectar ao Kafka com os bootstrap servers e, se necessario, o protocolo de seguranca e as credenciais SASL. Opcionalmente defina um identificador de Sessao para manter varias conexoes abertas ao mesmo tempo.
 2. Execute Testar Conexao para confirmar que o Rocketbot consegue alcancar o cluster antes de montar o resto do fluxo.
 3. Use os comandos de topics (Listar Topics, Criar Topic, Excluir Topic, Descrever Topic, Obter Offsets) para administra-los.
-4. Use Produzir Mensagem / Produzir Batch para publicar, e Consumir Mensagens / Commit Offsets / Fechar Consumidor para ler.
+4. Use Produzir Mensagem / Produzir Batch para publicar, e Consumir Mensagens / Commit Offsets / Fechar Consumidor para ler. Use Fechar Sessao Kafka no final do fluxo para liberar todos os recursos de uma sessao.
 
 Exemplos de conexao:
-- Kafka local ou self-hosted sem autenticacao: Bootstrap servers `localhost:9092` ou `broker1:9092,broker2:9092`; Protocolo de seguranca 
-`PLAINTEXT`; deixe vazios Mecanismo SASL, Usuario e Senha.
+- Kafka local ou self-hosted sem autenticacao: Bootstrap 
+servers `localhost:9092` ou `broker1:9092,broker2:9092`; Protocolo de seguranca `PLAINTEXT`; deixe vazios Mecanismo SASL, Usuario e Senha.
 - Kafka self-hosted com SASL: Bootstrap servers `broker1:9093,broker2:9093`; Protocolo de seguranca `SASL_SSL` ou `SASL_PLAINTEXT` conforme o cluster; Mecanismo SASL `PLAIN`, `SCRAM-SHA-256` ou `SCRAM-SHA-512`; Usuario e Senha do usuario Kafka.
 - Confluent Cloud: Bootstrap servers da configuracao do cluster, geralmente `pkc-xxxxx.region.provider.confluent.cloud:9092`; Protocolo de seguranca `SASL_SSL`; Mecanismo SASL `PLAIN`; Usuario = API key; Senha = API secret.
-- Azure Event Hubs usando Kafka API: Bootstrap servers `<namespace>.servicebus.windows.net:9093`; Protocolo de seguranca `SASL_SSL`; Mecanismo SASL `PLAIN`; Usuario exatamente `$ConnectionString`; Senha = connection string completa do Event Hubs, por exemplo `Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<key>`. Se a connection string incluir `EntityPath`, use o mesmo nome do Event Hub como topic Kafka.
-- AWS MSK: Use a
- lista de brokers e o modo de autenticacao fornecidos pelo cluster. Para autenticacao IAM/OAUTHBEARER este modulo nao e suficiente como esta; use credenciais SCRAM ou PLAIN expostas pelo cluster.
+- Azure Event Hubs usando Kafka API: Bootstrap servers `<namespace>.servicebus.windows.net:9093`; Protocolo de seguranca `SASL_SSL`; Mecanismo SASL `PLAIN`; Usuario exatamente `$ConnectionString`; Senha = connection string completa do Event Hubs, por exemplo `Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<key>`. Se a connection string 
+incluir `EntityPath`, use o mesmo nome do Event Hub como topic Kafka.
+- AWS MSK: Use a lista de brokers e o modo de autenticacao fornecidos pelo cluster. Para autenticacao IAM/OAUTHBEARER este modulo nao e suficiente como esta; use credenciais SCRAM ou PLAIN expostas pelo cluster.
 
 Sessoes:
 - Todos os comandos recebem um identificador de Sessao. Deixe vazio para usar a conexao padrao, ou defina um para manter varias conexoes/consumers independentes no mesmo fluxo (por exemplo, um por cluster ou por consumer group).
 - Conectar ao Kafka apenas guarda a configuracao da conexao; ainda nao cria o consumer.
+- Cada sessao pode ter um consumer ativo. Para usar consumers independentes com topicos, grupos ou offsets diferentes, use sessoes diferentes.
+- Fechar Sessao Kafka fecha o producer e o consumer da sessao, e depois remove a sessao. Nao confirma offsets consumidos automaticamente.
 
 Publicar mensagens:
-- Produzir Mensagem envia uma unica mensagem (chave opcional; o valor pode ser texto simples ou JSON).
+- Produzir Mensagem envia uma unica mensagem (chave opcional; o valor pode ser texto 
+simples ou JSON).
 - Produzir Batch envia uma lista JSON de mensagens em uma unica chamada, por exemplo `[{"key": "1", "value": "ola"}, {"key": "2", "value": {"total": 100}}]`. Cada item pode ser um valor simples ou um objeto `{key, value}`. Util quando o robo ja tem uma lista de registros para publicar juntos.
 
 Consumir mensagens (fluxo de consumer group):
-1. Execute 
-Consumir Mensagens com Topicos (separados por virgula), Group ID e Offset inicial. Esses valores, junto com o Max poll interval, so se aplicam na primeira vez que o consumer e criado para essa sessao; para altera-los depois, execute primeiro Fechar Consumidor e chame Consumir Mensagens novamente.
+1. Execute Consumir Mensagens com Topicos (separados por virgula), Group ID e Offset inicial. Esses valores, junto com o Max poll interval, so se aplicam na primeira vez que o consumer e criado para essa sessao; para altera-los depois, execute primeiro Fechar Consumidor e chame Consumir Mensagens novamente.
 2. Processe as mensagens retornadas no robo. Cada mensagem inclui seu proprio `topic`, `partition`, `offset`, `key` e `value`, assim voce identifica de qual topico ela veio ao assinar mais de um.
-3. Execute Commit Offsets para informar ao Kafka que as mensagens foram processadas. Por padrao confirma todo o lote; se o robo processou apenas algumas, passe as bem-sucedidas em "Mensagens processadas" para confirmar somente ate essas (e as anteriores), deixando o restante para a proxima leitura tentar de novo.
+3. Execute Commit Offsets para informar ao Kafka que as mensagens foram processadas. Por padrao confirma todo o lote; se o robo 
+processou apenas algumas, passe as bem-sucedidas em "Mensagens processadas" para confirmar somente ate essas (e as anteriores), deixando o restante para a proxima leitura tentar de novo.
 4. Execute Fechar Consumidor ao terminar o fluxo, ou antes de alterar Topicos, Group ID, Offset inicial ou Max poll interval na mesma sessao.
 
 Notas importantes:
-- Testar Conexao nunca 
-interrompe o fluxo: retorna true ou false para que o robo decida com base no resultado. Se falhar, o motivo e impresso no log de execucao, nao na variavel de resultado.
+- Testar Conexao nunca interrompe o fluxo: retorna true ou false para que o robo decida com base no resultado. Se falhar, o motivo e impresso no log de execucao, nao na variavel de resultado.
 - Commit Offsets retorna false, sem lancar erro, quando nao havia nada novo para confirmar desde o ultimo commit -- isso e normal, nao uma falha. Se o commit em si falhar (por exemplo, o consumer foi removido do grupo), o comando lanca um erro em vez de retornar false.
-- Os valores das mensagens sao armazenados e retornados exatamente como foram enviados, incluindo espacos, quebras de linha ou formatacao do texto original (Produzir Mensagem/Batch nao os recortam nem reformatam, e Consumir Mensagens os retorna sem alteracoes).
+- Os valores das mensagens sao armazenados e retornados exatamente como foram enviados, incluindo espacos, quebras de linha ou formatacao do texto original (Produzir Mensagem/Batch nao os 
+recortam nem reformatam, e Consumir Mensagens os retorna sem alteracoes).
 - Group ID, Offset inicial e Max poll interval se aplicam igualmente a todos os topicos de uma mesma chamada de Consumir Mensagens. Para usar configuracao diferente por topico, use uma sessao separada para cada um.
-- Se Commit Offsets rodar mais tarde que o Max poll interval configurado desde o 
-ultimo Consumir Mensagens, o Kafka pode ja ter removido o consumer do grupo; execute Consumir Mensagens novamente ou aumente o Max poll interval.
+- Se Offset inicial ficar vazio, o modulo usa por padrao o comportamento `latest` do Kafka. Isso evita processar mensagens antigas quando um consumer group nao tem offset confirmado, mas tambem significa que depois de consumir mensagens sem executar Commit Offsets, fechar o consumer e cria-lo novamente pode retornar uma lista vazia em vez de entregar novamente essas mensagens anteriores. Use `earliest` explicitamente quando precisar ler desde o primeiro offset disponivel para um grupo novo/sem commits, por exemplo em testes ou reprocessamentos controlados.
+- Se Commit Offsets rodar mais tarde que o Max poll interval configurado desde o ultimo Consumir Mensagens, o Kafka pode ja ter removido o consumer 
+do grupo; execute Consumir Mensagens novamente ou aumente o Max poll interval.
 - Excluir Topic e irreversivel e, dependendo da configuracao do cluster, tambem apaga as mensagens do topico. Confira bem o nome antes de rodar isso em producao.
 - Na primeira vez que o modulo roda em uma maquina, ele instala automaticamente a biblioteca `confluent-kafka` caso nao haja uma versao compativel ja incluida; isso requer acesso a internet nessa primeira execucao.
 
 Referencias:
 - https://kafka.apache.org/documentation/
 - https://docs.confluent.io/platform/current/clients/confluent-kafka-python/html/index.html
-
 ## Descrição do comando
 
 ### Conectar ao Kafka
@@ -162,7 +165,7 @@ Envia várias mensagens juntas a um topic. Útil quando o bot tem uma lista de r
 
 ### Consumir Mensagens
 
-Lê mensagens de um ou vários topics, cada uma com seu próprio campo 'topic'. Tem limite de quantidade e de tempo. O consumer (topics, group ID, offset inicial, max poll interval) é criado na primeira chamada da sessão e reutilizado depois; execute 'Fechar Consumidor' primeiro para alterar esses valores
+Cria um consumer que lê mensagens de um ou vários topics, cada uma com seu próprio campo 'topic'. Tem limite de quantidade e de tempo. O consumer (topics, group ID, offset inicial, max poll interval) é criado na primeira chamada da sessão e reutilizado depois; execute 'Fechar Consumidor' primeiro para alterar esses valores
 |Parâmetros|Descrição|exemplo|
 | --- | --- | --- |
 |Tópicos|Tópicos a consumir, separados por vírgula. Se informar mais de um, cada mensagem pode vir de qualquer um deles; o campo 'topic' indica de qual|topico1,topico2|
@@ -189,3 +192,11 @@ Fecha a sessão do consumidor e libera seus recursos. É necessário antes de al
 |Parâmetros|Descrição|exemplo|
 | --- | --- | --- |
 |Sessão|Identificador de conexão|Conn1|
+
+### Fechar Sessão
+
+Fecha o producer e o consumer ativos da sessão indicada, libera seus recursos e remove a sessão. Não confirma offsets consumidos automaticamente
+|Parâmetros|Descrição|exemplo|
+| --- | --- | --- |
+|Sessão|Identificador de conexão|Conn1|
+|Timeout flush (segundos)|Tempo máximo para esperar o producer enviar mensagens pendentes antes de fechar a sessão. Padrão 10|10|

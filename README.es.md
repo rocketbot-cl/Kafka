@@ -46,13 +46,16 @@ Envía un mensaje individual a un topic. Por ejemplo, publicar un JSON con datos
 Envía varios mensajes juntos a un topic. Sirve cuando el bot tiene una lista de registros y quiere publicarlos todos en Kafka
 
 10. Consumir Mensajes
-Lee mensajes de uno o varios topics, cada uno con su propio campo 'topic'. Tiene límite de cantidad y de tiempo. El consumer (topics, group ID, offset inicial, max poll interval) se crea en la primera llamada de la sesión y se reutiliza después; ejecute 'Cerrar Consumidor' primero para cambiar esos valores
+Crea un consumer que lee mensajes de uno o varios topics, cada uno con su propio campo 'topic'. Tiene límite de cantidad y de tiempo. El consumer (topics, group ID, offset inicial, max poll interval) se crea en la primera llamada de la sesión y se reutiliza después; ejecute 'Cerrar Consumidor' primero para cambiar esos valores
 
 11. Commit Offsets
 Confirma que los mensajes consumidos fueron procesados e indica a Kafka desde dónde continuar la próxima lectura. Por defecto confirma todo el lote de 'Consumir Mensajes'; use 'Mensajes procesados' para confirmar solo hasta el último exitoso
 
 12. Cerrar Consumidor
 Cierra la sesión del consumidor y libera sus recursos. Es necesario antes de cambiar la configuración del consumer (Group ID, Offset inicial, Max poll interval) en la próxima llamada a 'Consumir Mensajes'
+
+13. Cerrar Sesión
+Cierra el producer y consumer activos de la sesión indicada, libera sus recursos y elimina la sesión. No confirma offsets consumidos automáticamente
 
 
 
