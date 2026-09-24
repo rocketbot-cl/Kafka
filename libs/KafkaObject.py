@@ -103,6 +103,20 @@ class KafkaObject:
             )
         return self.sessions[session]
 
+    def close_session_resources(self, session, conn, timeout=None):
+        if conn["producer"] is not None:
+            remaining = conn["producer"].flush(float(timeout) if timeout else 10.0)
+            if remaining:
+                raise Exception(
+                    "Could not close session '%s' because %d producer message(s) are still pending. "
+                    "Increase the flush timeout or retry later." % (session, remaining)
+                )
+            conn["producer"] = None
+
+        if conn["consumer"] is not None:
+            conn["consumer"].close()
+            conn["consumer"] = None
+
     @staticmethod
     def build_config(bootstrap_servers, security_protocol, sasl_mechanism, username, password):
         config = {"bootstrap.servers": bootstrap_servers}
@@ -119,6 +133,9 @@ class KafkaObject:
     def connect_command(self, bootstrap_servers, security_protocol, sasl_mechanism, username, password, session):
         bootstrap_servers = require_str(bootstrap_servers, "Bootstrap servers")
         session = session or SESSION_DEFAULT
+
+        if session in self.sessions:
+            self.close_session_resources(session, self.sessions[session])
 
         config = self.build_config(bootstrap_servers, security_protocol, sasl_mechanism, username, password)
         self.sessions[session] = {"config": config, "producer": None, "consumer": None}
@@ -463,18 +480,6 @@ class KafkaObject:
         session = session or SESSION_DEFAULT
         conn = self.require_session(session)
 
-        if conn["producer"] is not None:
-            remaining = conn["producer"].flush(float(timeout) if timeout else 10.0)
-            if remaining:
-                raise Exception(
-                    "Could not close session '%s' because %d producer message(s) are still pending. "
-                    "Increase the flush timeout or retry later." % (session, remaining)
-                )
-            conn["producer"] = None
-
-        if conn["consumer"] is not None:
-            conn["consumer"].close()
-            conn["consumer"] = None
-
+        self.close_session_resources(session, conn, timeout)
         del self.sessions[session]
         return True
